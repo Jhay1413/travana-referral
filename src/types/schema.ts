@@ -136,18 +136,15 @@ export interface User {
 }
 
 export interface Referral {
-  id: string;
   referrerId: string;
-  refereeEmail: string;
-  refereeName: string;
-  refereePhone: string | null;
+  referredEmail: string;
+  referredName: string;
+  referredPhoneNumber: string | null;
   notes: string | null;
-  status: string;
-  referralCode: string;
-  conversionDate: Date | null;
-  createdAt: Date | null;
-  updatedAt: Date | null;
+
 }
+
+
 
 export interface Commission {
   id: string;
@@ -179,5 +176,20 @@ export const referralStatusLabels = {
   booked: 'Booked',
   lost: 'Lost'
 } as const;
+
+
+export const referralsSchema = z.object({
+  id: z.string(),
+  referrerId: z.string(),
+  referrerName: z.string(),
+  referredEmail: z.string(),
+  referredName: z.string(),
+  referredPhoneNumber: z.string().nullable(),
+  notes: z.string().nullable(),
+  referredStatus: z.enum(['PENDING', 'APPROVED', 'REJECTED']),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+export type Referrals = z.infer<typeof referralsSchema>;
 
 export type ReferralStatus = keyof typeof referralStatusLabels;

@@ -1,27 +1,17 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
-import Home from "./pages/home";
+import { router } from "./lib/router";
 
-function Router() {
-  // const { isAuthenticated, isLoading } = useAuth();
-
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/*" element={<Navigate to="/" />} />
-    </Routes>
-  );
-}
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster/>
-        <Router />
+        <RouterProvider router={router} />
       </TooltipProvider>
     </QueryClientProvider>
   );
