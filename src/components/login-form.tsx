@@ -12,6 +12,8 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import http from "@/lib/http-client";
 
 interface LoginFormProps {
   onLogin?: (email: string, password: string) => void;
@@ -21,6 +23,18 @@ interface LoginFormProps {
 export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   const { data: session } = authClient.useSession();
   console.log(session);
+
+
+  const {data} = useQuery({
+    queryKey: ["session"],
+    queryFn: () => {
+      return http.get('/')
+    },
+  })
+
+
+  console.log(data);
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
