@@ -58,7 +58,7 @@ export default function QRCodeModal({ isOpen, onClose, whatsappUrl, userName }: 
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h3 className="text-base sm:text-lg font-semibold text-foreground" data-testid="text-qr-modal-title">
-              WhatsApp QR Code
+             Referral QR Code
             </h3>
             <Button
               variant="ghost"
@@ -80,7 +80,7 @@ export default function QRCodeModal({ isOpen, onClose, whatsappUrl, userName }: 
               ) : qrCodeDataUrl ? (
                 <img 
                   src={qrCodeDataUrl} 
-                  alt="WhatsApp Referral QR Code" 
+                  alt="Referral QR Code" 
                   className="w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] max-w-full"
                   data-testid="img-qr-code"
                 />
@@ -93,7 +93,7 @@ export default function QRCodeModal({ isOpen, onClose, whatsappUrl, userName }: 
 
             <div className="space-y-2 px-2">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Show this QR code to someone so they can scan it with their phone camera to open WhatsApp with your referral message
+                Show this QR code to someone so they can scan it with their phone camera to open the referral form
               </p>
               <p className="text-xs text-muted-foreground font-medium">
                 Works with any smartphone camera or QR scanner app

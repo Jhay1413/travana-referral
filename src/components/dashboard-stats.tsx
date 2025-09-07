@@ -1,5 +1,6 @@
 // import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
+import { useFetchReferrerStats } from "@/hooks/useReferral";
 
 type DashboardStats = {
   totalEarnings: number;
@@ -14,7 +15,11 @@ type DashboardStats = {
   };
 };
 
-export default function DashboardStats() {
+export default function DashboardStats({ userId }: { userId: string }) {
+
+  const { data: stats } = useFetchReferrerStats(userId);
+
+  console.log(stats);
 
   // const { data: stats, isLoading } = useQuery<DashboardStats>({
   //   queryKey: ["/api/dashboard/stats"],
@@ -51,7 +56,7 @@ export default function DashboardStats() {
             <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Total Earnings</p>
               <p className="text-2xl sm:text-3xl font-bold text-accent truncate" data-testid="text-total-earnings">
-                £1000.00
+                £{stats?.totalEarnings.toFixed(2)}
               </p>
             </div>
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -71,7 +76,7 @@ export default function DashboardStats() {
             <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Active Referrals</p>
               <p className="text-2xl sm:text-3xl font-bold text-foreground" data-testid="text-active-referrals">
-                10
+                {stats?.activeReferralsCount}
               </p>
             </div>
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -111,7 +116,7 @@ export default function DashboardStats() {
             <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Pending Commission</p>
               <p className="text-2xl sm:text-3xl font-bold text-chart-4 truncate" data-testid="text-pending-commission">
-                £300.50
+                £{stats?.pendingReferrals.toFixed(2)}
               </p>
             </div>
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-chart-4/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -120,7 +125,7 @@ export default function DashboardStats() {
           </div>
           <div className="flex items-center mt-3 sm:mt-4">
             <span className="text-sm text-muted-foreground">
-              4 referrals pending
+             0 referrals pending
             </span>
           </div>
         </CardContent>

@@ -8,6 +8,7 @@ import QRCodeModal from "./qr-code-modal";
 import ShareMessageCustomization from "@/components/share-message-customization";
 import type { User, ShareMessage } from "@/types/schema";
 import { toast } from "sonner";
+import { useUser } from "@/hooks/useUser";
 
 interface ReferralLinkProps {
   user: User;
@@ -16,8 +17,8 @@ interface ReferralLinkProps {
 export default function ReferralLink({ user }: ReferralLinkProps) {
   const [copied, setCopied] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
-
-  const referralUrl = `${window.location.origin}/ref/${user.referralCode}`;
+  const {userId} = useUser();
+  const referralUrl = `${import.meta.env.VITE_BETTER_AUTH_URL}/public-client-request?ref=${userId}`;
 
   // Fetch custom share messages
   const { data: shareMessages } = useQuery<ShareMessage[]>({
@@ -88,11 +89,8 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
   };
 
   const getWhatsAppQRUrl = () => {
-    const customMessage = getShareMessage("whatsapp");
-    const message = customMessage
-      ? processMessage(customMessage.message)
-      : `Hi! 👋\n\nI wanted to share Travana with you - they provide amazing travel services and I think you'd love what they offer!\n\nUse my referral link to get started: ${referralUrl}\n\nLet me know if you have any questions! ✈️`;
-    return `https://wa.me/?text=${encodeURIComponent(message)}`;
+   
+    return `${import.meta.env.VITE_BETTER_AUTH_URL}/public-client-request?ref=${userId}`;
   };
 
   return (

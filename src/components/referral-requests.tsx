@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, Mail, Phone } from "lucide-react";
-import { useFetchReferrals } from "@/hooks/useReferral";
+import { Calendar, User, Mail, Phone, Clock } from "lucide-react";
+import { useFetchReferralRequests } from "@/hooks/useReferral";
 import { useUser } from "@/hooks/useUser";
 
 interface ReferralRequestsProps {
@@ -21,10 +21,8 @@ export function ReferralRequests({ className }: ReferralRequestsProps) {
     data: referrals = [],
     isLoading,
     error,
-  } = useFetchReferrals(userId || "");
+  } = useFetchReferralRequests(userId || "");
 
-
-  
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
@@ -107,10 +105,17 @@ export function ReferralRequests({ className }: ReferralRequestsProps) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Referral Requests</CardTitle>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <User className="h-5 w-5 text-blue-600" />
+            <CardTitle>Referral Requests</CardTitle>
+          </div>
+          <Badge variant="secondary" className="text-xs">
+            {referrals.length} Active
+          </Badge>
+        </div>
         <CardDescription>
-          {referrals.length} referral request{referrals.length !== 1 ? "s" : ""}{" "}
-          sent
+          Your sent referral requests and their status
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -118,62 +123,89 @@ export function ReferralRequests({ className }: ReferralRequestsProps) {
           {referrals.map((referral) => (
             <div
               key={referral.id}
-              className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
+              className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-muted/30 transition-colors cursor-pointer"
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <h4 className="font-semibold text-foreground">
-                    {referral.referredName}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Request ID: {referral.id}
-                  </p>
-                </div>
-                <Badge
-                  className={
-                    referral.referredStatus
-                      ? getStatusColor(referral.referredStatus)
-                      : ""
-                  }
-                >
-                  {referral.referredStatus}
-                </Badge>
+              {/* Avatar/Profile Image */}
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-semibold text-sm">
+                  {referral.referredName?.charAt(0)?.toUpperCase() || "U"}
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                <div className="flex items-center space-x-2 text-sm">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span>{referral.referredEmail}</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span>{referral.referredPhoneNumber}</span>
-                </div>
+              {/* Referral Details */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="flex items-center space-x-2 mb-1">
+                      <h4 className="font-semibold text-foreground truncate">
+                        {referral.referredName}
+                      </h4>
+                      <Badge
+                        className={
+                          referral.referredStatus
+                            ? getStatusColor(referral.referredStatus)
+                            : ""
+                        }
+                      >
+                        {referral.referredStatus}
+                      </Badge>
+                    </div>
 
-                <div className="flex items-center space-x-2 text-sm">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span>
-                    Created {new Date(referral.createdAt).toDateString() || ""}
-                  </span>
-                </div>
-              </div>
+                    <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-2">
+                      <div className="flex items-center space-x-1">
+                        <Mail className="h-3 w-3" />
+                        <span className="truncate">
+                          {referral.referredEmail}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Phone className="h-3 w-3" />
+                        <span>{referral.referredPhoneNumber}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="h-3 w-3" />
+                        <span>
+                          {new Date(referral.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
 
-              {referral.notes && (
-                <div className="mt-3 p-3 bg-muted/30 rounded-md">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Notes:</strong> {referral.notes}
-                  </p>
-                </div>
-              )}
+                    {referral.notes && (
+                      <div className="text-xs text-muted-foreground truncate">
+                        <strong>Note:</strong> {referral.notes}
+                      </div>
+                    )}
+                  </div>
 
-              <div className="flex items-center justify-between mt-4">
-                <div className="text-xs text-muted-foreground">
-                  Last updated:{" "}
-                  {new Date(referral.updatedAt).toDateString() || ""}
+                  {/* Status and Actions */}
+                  <div className="text-right ml-4">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Clock className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(referral.updatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        View
+                      </Button>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Update
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
+
+          {referrals.length > 0 && (
+            <div className="pt-4 border-t border-border">
+              <Button variant="outline" className="w-full">
+                View All Referral Requests
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

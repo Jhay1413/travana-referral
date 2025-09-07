@@ -6,7 +6,7 @@ import QRCodeModal from "@/components/qr-code-modal";
 import { QrCode } from "lucide-react";
 import type { User } from "@/types/schema";
 import DashboardStats from "@/components/dashboard-stats";
-// import RecentReferrals from "@/components/recent-referrals";
+import RecentReferrals from "@/components/recent-referrals";
 import HolidayDeals from "@/components/holiday-deals";
 import ReferralLink from "@/components/referral-link";
 import { ReferralRequests } from "@/components/referral-requests";
@@ -17,7 +17,7 @@ import { useUser } from "@/hooks/useUser";
 export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { getInitials } = useUser();
+  const { getInitials, userId } = useUser();
 
   const [showQRModal, setShowQRModal] = useState(false);
 
@@ -261,18 +261,15 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Dashboard Stats */}
-        <DashboardStats />
+        <DashboardStats userId={userId || ""} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-8">
-          {/* Recent Referrals - Full width on mobile */}
           <div className="lg:col-span-2 order-2 lg:order-1 space-y-6 sm:space-y-8">
+            <RecentReferrals />
             <ReferralRequests />
-            {/* <RecentReferrals /> */}
             <HolidayDeals />
           </div>
 
-          {/* Referral Link & Progress - Show first on mobile */}
           <div className="space-y-6 order-1 lg:order-2">
             <ReferralLink
               user={

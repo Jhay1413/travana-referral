@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // Schemas for validation
 export const upsertUserSchema = z.object({
@@ -23,23 +23,44 @@ export const insertReferralSchema = z.object({
   refereeName: z.string().min(1, "Referee name is required"),
   refereePhone: z.string().optional(),
   notes: z.string().optional(),
-  status: z.enum(['enquiry', 'quote_in_progress', 'quote_ready', 'awaiting_decision', 'booked', 'lost']).default('enquiry'),
+  status: z
+    .enum([
+      "enquiry",
+      "quote_in_progress",
+      "quote_ready",
+      "awaiting_decision",
+      "booked",
+      "lost",
+    ])
+    .default("enquiry"),
   conversionDate: z.date().nullable().optional(),
 });
 
 export const updateReferralSchema = z.object({
-  refereeEmail: z.string().email("Please enter a valid email address").optional(),
+  refereeEmail: z
+    .string()
+    .email("Please enter a valid email address")
+    .optional(),
   refereeName: z.string().min(1, "Referee name is required").optional(),
   refereePhone: z.string().optional(),
   notes: z.string().optional(),
-  status: z.enum(['enquiry', 'quote_in_progress', 'quote_ready', 'awaiting_decision', 'booked', 'lost']).optional(),
+  status: z
+    .enum([
+      "enquiry",
+      "quote_in_progress",
+      "quote_ready",
+      "awaiting_decision",
+      "booked",
+      "lost",
+    ])
+    .optional(),
   conversionDate: z.date().nullable().optional(),
 });
 
 export const insertCommissionSchema = z.object({
   referralId: z.string().min(1, "Referral ID is required"),
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid amount format"),
-  status: z.string().default('pending'),
+  status: z.string().default("pending"),
   paidDate: z.date().nullable().optional(),
 });
 
@@ -80,25 +101,34 @@ export const loginSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export const signupSchema = insertUserSchema.extend({
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string().min(6, "Password confirmation is required"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+export const signupSchema = insertUserSchema
+  .extend({
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Password confirmation is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export const insertShareMessageSchema = z.object({
-  platform: z.enum(['email', 'whatsapp', 'linkedin']),
-  subject: z.string().max(200, 'Subject too long').optional(),
-  message: z.string().min(1, 'Message is required').max(1000, 'Message too long'),
+  platform: z.enum(["email", "whatsapp", "linkedin"]),
+  subject: z.string().max(200, "Subject too long").optional(),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .max(1000, "Message too long"),
   isActive: z.boolean().default(true).optional(),
 });
 
 export const updateShareMessageSchema = z.object({
-  platform: z.enum(['email', 'whatsapp', 'linkedin']).optional(),
-  subject: z.string().max(200, 'Subject too long').optional(),
-  message: z.string().min(1, 'Message is required').max(1000, 'Message too long').optional(),
+  platform: z.enum(["email", "whatsapp", "linkedin"]).optional(),
+  subject: z.string().max(200, "Subject too long").optional(),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .max(1000, "Message too long")
+    .optional(),
   isActive: z.boolean().optional(),
 });
 
@@ -135,16 +165,14 @@ export interface User {
   updatedAt: Date | null;
 }
 
-export interface Referral {
-  referrerId: string;
-  referredEmail: string;
-  referredName: string;
-  referredPhoneNumber: string | null;
-  notes: string | null;
-
-}
-
-
+export const referralRequestMutate = z.object({
+  referrerId: z.string(),
+  referredEmail: z.string(),
+  referredName: z.string(),
+  referredPhoneNumber: z.string().nullable(),
+  notes: z.string().nullable(),
+});
+export type ReferralRequestMutate = z.infer<typeof referralRequestMutate>;
 
 export interface Commission {
   id: string;
@@ -169,16 +197,15 @@ export interface ShareMessage {
 
 // Status display helper
 export const referralStatusLabels = {
-  enquiry: 'Enquiry',
-  quote_in_progress: 'Quote In Progress',
-  quote_ready: 'Quote Ready',
-  awaiting_decision: 'Awaiting Decision',
-  booked: 'Booked',
-  lost: 'Lost'
+  enquiry: "Enquiry",
+  quote_in_progress: "Quote In Progress",
+  quote_ready: "Quote Ready",
+  awaiting_decision: "Awaiting Decision",
+  booked: "Booked",
+  lost: "Lost",
 } as const;
 
-
-export const referralsSchema = z.object({
+export const referralRequest = z.object({
   id: z.string(),
   referrerId: z.string(),
   referrerName: z.string(),
@@ -186,10 +213,31 @@ export const referralsSchema = z.object({
   referredName: z.string(),
   referredPhoneNumber: z.string().nullable(),
   notes: z.string().nullable(),
-  referredStatus: z.enum(['PENDING', 'APPROVED', 'REJECTED']),
+  referredStatus: z.enum(["PENDING", "APPROVED", "REJECTED"]),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
-export type Referrals = z.infer<typeof referralsSchema>;
+
+export const referralSchema = z.object({
+  id: z.string(),
+  transactionId: z.string(),
+  status: z.string(),
+  clientName: z.string(),
+  potentialCommission: z.number(),
+  commission: z.number(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+
+export const fetchReferrerStatsSchema = z.object({
+  activeReferralsCount: z.number(),
+  totalEarnings: z.number(),
+  pendingReferrals: z.number(),
+});
+
+export type FetchReferrerStats = z.infer<typeof fetchReferrerStatsSchema>;
+export type Referral = z.infer<typeof referralSchema>;
+export type RefferalRequest = z.infer<typeof referralRequest>;
 
 export type ReferralStatus = keyof typeof referralStatusLabels;
