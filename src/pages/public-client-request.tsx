@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,17 +13,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useReferral } from "@/hooks/useReferral";
 import {
   referralRequestMutate,
   type ReferralRequestMutate,
 } from "@/types/schema";
+import { CheckCircle } from "lucide-react";
 
 // Form validation schema
 
 export const PublicClientRequest = () => {
   const [searchParams] = useSearchParams();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const ref = searchParams.get("ref");
   console.log(ref);
   const { createReferral, isPending } = useReferral();
@@ -30,6 +40,7 @@ export const PublicClientRequest = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ReferralRequestMutate>({
     resolver: zodResolver(referralRequestMutate),
     defaultValues: {
@@ -47,10 +58,24 @@ export const PublicClientRequest = () => {
       toast.error("Referral code is required");
       return;
     }
-    createReferral({ ...data, referrerId: ref });
+    createReferral(
+      { ...data, referrerId: ref },
+      {
+        onSuccess: () => {
+          setShowSuccessModal(true);
+          reset();
+        },
+      }
+    );
+    // Show success modal and reset form
   };
+
   const onError = () => {
     console.log(errors);
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
   };
 
   return (
@@ -179,6 +204,29 @@ export const PublicClientRequest = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-md text-center">
+          <DialogHeader className="text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+              <CheckCircle className="h-12 w-12 text-green-600 dark:text-green-400" />
+            </div>
+            <DialogTitle className="text-xl font-semibold text-center">
+              Thank you for your inquiry!
+            </DialogTitle>
+            <DialogDescription className="text-base text-muted-foreground text-center">
+              Your request has been successfully submitted. Our team will review
+              the details and get back to you as soon as possible.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center pt-4">
+            <Button onClick={handleCloseModal} className="px-8">
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
