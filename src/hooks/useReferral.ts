@@ -34,7 +34,7 @@ export const useFetchReferrerStats = (id: string) => {
   return { data, isLoading, error };
 };
 export function useReferral(
-  onSuccess?: () => void
+ 
 ) {
   const queryClient = useQueryClient();
   const { userId } = useUser();
