@@ -16,7 +16,7 @@ export const useFetchReferralRequests = (id: string) => {
     enabled: !!id,
   });
   return { data, isLoading, error };
-};
+};  
 export const useFetchReferrals = (id: string) => {
   const { data, isLoading, error } = useQuery<Referral[], Error>({
     queryKey: ["referrals", id],

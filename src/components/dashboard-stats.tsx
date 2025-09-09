@@ -16,7 +16,6 @@ type DashboardStats = {
 };
 
 export default function DashboardStats({ userId }: { userId: string }) {
-
   const { data: stats } = useFetchReferrerStats(userId);
 
   console.log(stats);
@@ -25,8 +24,6 @@ export default function DashboardStats({ userId }: { userId: string }) {
   //   queryKey: ["/api/dashboard/stats"],
   //   retry: false,
   // });
-
-
 
   // if (isLoading) {
   //   return (
@@ -46,8 +43,6 @@ export default function DashboardStats({ userId }: { userId: string }) {
   //   );
   // }
 
-  
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       <Card className="border border-border">
@@ -55,7 +50,10 @@ export default function DashboardStats({ userId }: { userId: string }) {
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Total Earnings</p>
-              <p className="text-2xl sm:text-3xl font-bold text-accent truncate" data-testid="text-total-earnings">
+              <p
+                className="text-2xl sm:text-3xl font-bold text-accent truncate"
+                data-testid="text-total-earnings"
+              >
                 £{stats?.totalEarnings.toFixed(2)}
               </p>
             </div>
@@ -65,7 +63,9 @@ export default function DashboardStats({ userId }: { userId: string }) {
           </div>
           <div className="flex items-center mt-3 sm:mt-4">
             <span className="text-sm text-accent font-medium">+12.5%</span>
-            <span className="text-sm text-muted-foreground ml-1">this month</span>
+            <span className="text-sm text-muted-foreground ml-1">
+              this month
+            </span>
           </div>
         </CardContent>
       </Card>
@@ -75,7 +75,10 @@ export default function DashboardStats({ userId }: { userId: string }) {
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Active Referrals</p>
-              <p className="text-2xl sm:text-3xl font-bold text-foreground" data-testid="text-active-referrals">
+              <p
+                className="text-2xl sm:text-3xl font-bold text-foreground"
+                data-testid="text-active-referrals"
+              >
                 {stats?.activeReferralsCount}
               </p>
             </div>
@@ -85,7 +88,9 @@ export default function DashboardStats({ userId }: { userId: string }) {
           </div>
           <div className="flex items-center mt-3 sm:mt-4">
             <span className="text-sm text-accent font-medium">+8</span>
-            <span className="text-sm text-muted-foreground ml-1">this week</span>
+            <span className="text-sm text-muted-foreground ml-1">
+              this week
+            </span>
           </div>
         </CardContent>
       </Card>
@@ -94,9 +99,14 @@ export default function DashboardStats({ userId }: { userId: string }) {
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
-              <p className="text-sm text-muted-foreground">Conversion Rate</p>
-              <p className="text-2xl sm:text-3xl font-bold text-foreground" data-testid="text-conversion-rate">
-                10.0%
+              <p className="text-sm text-muted-foreground">
+                Potential Comisison
+              </p>
+              <p
+                className="text-2xl sm:text-3xl font-bold text-foreground"
+                data-testid="text-conversion-rate"
+              >
+                £{stats?.potentialComission}
               </p>
             </div>
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-chart-3/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -105,7 +115,9 @@ export default function DashboardStats({ userId }: { userId: string }) {
           </div>
           <div className="flex items-center mt-3 sm:mt-4">
             <span className="text-sm text-accent font-medium">+2.1%</span>
-            <span className="text-sm text-muted-foreground ml-1">vs last month</span>
+            <span className="text-sm text-muted-foreground ml-1">
+              vs last month
+            </span>
           </div>
         </CardContent>
       </Card>
@@ -114,8 +126,13 @@ export default function DashboardStats({ userId }: { userId: string }) {
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
-              <p className="text-sm text-muted-foreground">Pending Commission</p>
-              <p className="text-2xl sm:text-3xl font-bold text-chart-4 truncate" data-testid="text-pending-commission">
+              <p className="text-sm text-muted-foreground">
+                Pending Commission
+              </p>
+              <p
+                className="text-2xl sm:text-3xl font-bold text-chart-4 truncate"
+                data-testid="text-pending-commission"
+              >
                 £{stats?.pendingReferrals.toFixed(2)}
               </p>
             </div>
@@ -125,7 +142,7 @@ export default function DashboardStats({ userId }: { userId: string }) {
           </div>
           <div className="flex items-center mt-3 sm:mt-4">
             <span className="text-sm text-muted-foreground">
-             0 referrals pending
+              0 referrals pending
             </span>
           </div>
         </CardContent>

@@ -230,11 +230,11 @@ export const referralSchema = z.object({
   updatedAt: z.date(),
 });
 
-
 export const fetchReferrerStatsSchema = z.object({
   activeReferralsCount: z.number(),
   totalEarnings: z.number(),
   pendingReferrals: z.number(),
+  potentialComission: z.number(),
 });
 
 export type FetchReferrerStats = z.infer<typeof fetchReferrerStatsSchema>;
