@@ -18,9 +18,10 @@ export default function CreateReferralModal({
 }: CreateReferralModalProps) {
   const { userId } = useUser();
   const [formData, setFormData] = useState({
-    referredName: "",
-    referredEmail: "",
-    referredPhoneNumber: "",
+    referredEmail: null,
+    referredFirstName: "",
+    referredLastName: "",
+    referredPhoneNumber: null,
     notes: "",
   });
 
@@ -29,14 +30,9 @@ export default function CreateReferralModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.referredName.trim() || !formData.referredEmail.trim()) {
-      toast.error("Name and email are required");
-      return;
-    }
-
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.referredEmail)) {
+    if (!emailRegex.test(formData.referredEmail || "")) {
       toast.error("Please enter a valid email address");
       return;
     }
@@ -82,21 +78,41 @@ export default function CreateReferralModal({
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div>
               <Label
-                htmlFor="referredName"
+                htmlFor="referredFirstName"
                 className="text-sm font-medium text-foreground"
               >
-                Contact Name
+                First Name
               </Label>
               <Input
-                id="referredName"
+                id="referredFirstName"
                 type="text"
                 placeholder="Enter full name"
-                value={formData.referredName}
+                value={formData.referredFirstName}
                 onChange={(e) =>
-                  handleInputChange("referredName", e.target.value)
+                  handleInputChange("referredFirstName", e.target.value)
                 }
                 className="mt-2 h-12 text-base touch-manipulation"
                 data-testid="input-referred-name"
+                required
+              />
+            </div>
+            <div>
+              <Label
+                htmlFor="referredLastName"
+                className="text-sm font-medium text-foreground"
+              >
+                Last Name
+              </Label>
+              <Input
+                id="referredLastName"
+                type="text"
+                placeholder="Enter full name"
+                value={formData.referredLastName}
+                onChange={(e) =>
+                  handleInputChange("referredLastName", e.target.value)
+                }
+                className="mt-2 h-12 text-base touch-manipulation"
+                data-testid="input-referred-last-name"
                 required
               />
             </div>
@@ -112,7 +128,7 @@ export default function CreateReferralModal({
                 id="referredEmail"
                 type="email"
                 placeholder="Enter email address"
-                value={formData.referredEmail}
+                value={formData.referredEmail || ""}
                 onChange={(e) =>
                   handleInputChange("referredEmail", e.target.value)
                 }
@@ -133,7 +149,7 @@ export default function CreateReferralModal({
                 id="referredPhoneNumber"
                 type="tel"
                 placeholder="Enter phone number"
-                value={formData.referredPhoneNumber}
+                value={formData.referredPhoneNumber || ""}
                 onChange={(e) =>
                   handleInputChange("referredPhoneNumber", e.target.value)
                 }

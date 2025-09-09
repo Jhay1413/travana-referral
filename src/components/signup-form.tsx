@@ -23,7 +23,6 @@ export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
     lastName: "",
     email: "",
     password: "",
-    role: "",
     phoneNumber: "",
   });
 
@@ -38,7 +37,6 @@ export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        role: formData.role,
         phoneNumber: formData.phoneNumber,
       },
       {
@@ -113,18 +111,6 @@ export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
                 onChange={(e) =>
                   handleInputChange("phoneNumber", e.target.value)
                 }
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Input
-                id="role"
-                type="text"
-                placeholder="Enter your role"
-                value={formData.role}
-                onChange={(e) => handleInputChange("role", e.target.value)}
                 required
               />
             </div>

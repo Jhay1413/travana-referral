@@ -167,8 +167,9 @@ export interface User {
 
 export const referralRequestMutate = z.object({
   referrerId: z.string(),
-  referredEmail: z.string(),
-  referredName: z.string(),
+  referredEmail: z.string().nullable(),
+  referredFirstName: z.string(),
+  referredLastName: z.string(),
   referredPhoneNumber: z.string().nullable(),
   notes: z.string().nullable(),
 });

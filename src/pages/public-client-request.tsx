@@ -44,9 +44,10 @@ export const PublicClientRequest = () => {
   } = useForm<ReferralRequestMutate>({
     resolver: zodResolver(referralRequestMutate),
     defaultValues: {
-      referredName: "",
-      referredEmail: "",
-      referredPhoneNumber: "",
+      referredFirstName: "",
+      referredLastName: "",
+      referredEmail: null,
+      referredPhoneNumber: null,
       notes: "",
       referrerId: ref || "",
     },
@@ -105,21 +106,41 @@ export const PublicClientRequest = () => {
               {/* Client Name */}
               <div>
                 <Label
-                  htmlFor="referredName"
+                  htmlFor="referredFirstName"
                   className="text-sm font-medium text-foreground"
                 >
-                  Full Name *
+                  First Name *
                 </Label>
                 <Input
-                  id="referredName"
+                  id="referredFirstName"
+                  type="text"
+                  placeholder="Enter your first name"
+                  className="mt-2 h-12 text-base"
+                  {...register("referredFirstName")}
+                />
+                {errors.referredFirstName && (
+                  <p className="text-sm text-red-600 mt-1">
+                    {errors.referredFirstName.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label
+                  htmlFor="referredLastName"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Last Name *
+                </Label>
+                <Input
+                  id="referredLastName"
                   type="text"
                   placeholder="Enter your full name"
                   className="mt-2 h-12 text-base"
-                  {...register("referredName")}
+                  {...register("referredLastName")}
                 />
-                {errors.referredName && (
+                {errors.referredLastName && (
                   <p className="text-sm text-red-600 mt-1">
-                    {errors.referredName.message}
+                    {errors.referredLastName.message}
                   </p>
                 )}
               </div>
