@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Copy, Check, QrCode } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import QRCodeModal from "./qr-code-modal";
-import ShareMessageCustomization from "@/components/share-message-customization";
 import type { User, ShareMessage } from "@/types/schema";
 import { toast } from "sonner";
 import { useUser } from "@/hooks/useUser";
@@ -17,8 +16,10 @@ interface ReferralLinkProps {
 export default function ReferralLink({ user }: ReferralLinkProps) {
   const [copied, setCopied] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
-  const {userId} = useUser();
-  const referralUrl = `${import.meta.env.VITE_BETTER_AUTH_URL}/public-client-request?ref=${userId}`;
+  const { userId } = useUser();
+  const referralUrl = `${
+    import.meta.env.VITE_BETTER_AUTH_URL
+  }/public-client-request?ref=${userId}`;
 
   // Fetch custom share messages
   const { data: shareMessages } = useQuery<ShareMessage[]>({
@@ -89,8 +90,9 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
   };
 
   const getWhatsAppQRUrl = () => {
-   
-    return `${import.meta.env.VITE_BETTER_AUTH_URL}/public-client-request?ref=${userId}`;
+    return `${
+      import.meta.env.VITE_BETTER_AUTH_URL
+    }/public-client-request?ref=${userId}`;
   };
 
   return (
@@ -103,20 +105,9 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
           >
             Your Referral Link
           </h3>
-          <ShareMessageCustomization user={user} />
         </div>
         <div className="space-y-4">
           {/* QR Code Button - Prominent */}
-          <div className="text-center">
-            <Button
-              onClick={showQRCode}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-6 touch-manipulation font-semibold text-base"
-              data-testid="button-show-qr-prominent"
-            >
-              <QrCode className="h-5 w-5 mr-2" />
-              Show QR Code
-            </Button>
-          </div>
 
           {/* URL Display with Copy Button */}
           <div className="flex items-center gap-2">
@@ -139,6 +130,14 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
               ) : (
                 <Copy className="h-4 w-4" />
               )}
+            </Button>
+
+            <Button
+              onClick={showQRCode}
+              className="px-3 py-2 h-10 touch-manipulation min-w-[50px]"
+              data-testid="button-show-qr-prominent"
+            >
+              <QrCode className="" />
             </Button>
           </div>
           <div className="grid grid-cols-3 gap-2 sm:gap-3">

@@ -7,7 +7,15 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, TrendingUp } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Calendar, Clock, TrendingUp, Eye, Edit } from "lucide-react";
 import { useFetchReferrals } from "@/hooks/useReferral";
 import { useUser } from "@/hooks/useUser";
 
@@ -153,100 +161,100 @@ export default function RecentReferrals() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
-          {referrals.slice(0, 5).map((referral) => (
-            <div
-              key={referral.id}
-              className="group p-4 rounded-xl border border-border/50 hover:border-border hover:bg-muted/20 transition-all duration-200 cursor-pointer"
-            >
-              <div className="flex items-start space-x-4">
-                {/* Avatar */}
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-sm">
-                  <span className="text-white font-bold text-base">
-                    {getInitials(referral.clientName)}
-                  </span>
-                </div>
-
-                {/* Main Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className="font-semibold text-foreground text-base truncate">
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px]">Client</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Commission</TableHead>
+                <TableHead>Created</TableHead>
+                <TableHead>Updated</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {referrals.slice(0, 5).map((referral) => (
+                <TableRow key={referral.id} className="hover:bg-muted/50">
+                  <TableCell className="font-medium">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+                        <span className="text-white font-bold text-sm">
+                          {getInitials(referral.clientName)}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-foreground">
                           {referral.clientName}
-                        </h4>
-                        <Badge
-                          className={`${getStatusColor(
-                            referral.status
-                          )} text-xs font-medium px-2 py-1`}
-                        >
-                          {referral.status}
-                        </Badge>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 flex-shrink-0" />
-                          <span>
-                            {new Date(referral.createdAt).toLocaleDateString()}
-                          </span>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          ID: {referral.transactionId}
                         </div>
                       </div>
                     </div>
-
-                    {/* Commission Info */}
-                    <div className="text-right ml-4 flex-shrink-0">
-                      <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-3 min-w-[120px]">
-                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                          £{referral.commission.toFixed(2)}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Potential: {referral.potentialCommission.toFixed(2)}%
-                        </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      className={`${getStatusColor(
+                        referral.status
+                      )} text-xs font-medium px-2 py-1`}
+                    >
+                      {referral.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-right">
+                      <div className="font-bold text-green-600 dark:text-green-400">
+                        £{referral.commission.toFixed(2)}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {referral.potentialCommission.toFixed(2)}% potential
                       </div>
                     </div>
-                  </div>
-
-                  {/* Bottom Row - Last Updated & Actions */}
-                  <div className="flex items-center justify-between pt-2 border-t border-border/30">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      <span>
-                        Updated{" "}
-                        {new Date(referral.updatedAt).toLocaleDateString()}
-                      </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4" />
+                      {new Date(referral.createdAt).toLocaleDateString()}
                     </div>
-
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4" />
+                      {new Date(referral.updatedAt).toLocaleDateString()}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs h-7 px-3"
+                        className="h-8 w-8 p-0"
                       >
-                        View Details
+                        <Eye className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs h-7 px-3"
+                        className="h-8 w-8 p-0"
                       >
-                        Update Status
+                        <Edit className="h-4 w-4" />
                       </Button>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {referrals.length > 0 && (
-            <div className="pt-4 border-t border-border">
-              <Button variant="outline" className="w-full">
-                View All Referrals
-              </Button>
-            </div>
-          )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
+
+        {referrals.length > 0 && (
+          <div className="pt-4 border-t border-border">
+            <Button variant="outline" className="w-full">
+              View All Referrals
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

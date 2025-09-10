@@ -25,6 +25,15 @@ export const useFetchReferrals = (id: string) => {
   });
   return { data, isLoading, error };
 };
+
+export const useFetchCommissions = (id: string) => {
+  const { data, isLoading, error } = useQuery<Referral[], Error>({
+    queryKey: ["commissions", id],
+    queryFn: () => http.get(`/api/referral/${id}/commission`),
+    enabled: !!id,
+  });
+  return { data, isLoading, error };
+};
 export const useFetchReferrerStats = (id: string) => {
   const { data, isLoading, error } = useQuery<FetchReferrerStats, Error>({
     queryKey: ["referrerStats", id],
