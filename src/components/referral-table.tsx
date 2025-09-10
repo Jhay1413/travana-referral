@@ -13,9 +13,11 @@ import {
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const ReferralTable = () => {
   const { userId } = useUser();
+  const navigate = useNavigate();
   const {
     data: referrals = [],
     isLoading,
@@ -31,8 +33,8 @@ export const ReferralTable = () => {
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="">
+      <CardHeader className="">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <TrendingUp className="h-5 w-5 text-green-600" />
@@ -46,14 +48,14 @@ export const ReferralTable = () => {
           Your recent referral commissions and status
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="rounded-md border">
+      <CardContent className="md:py-6 md:px-6 px-2 py-2">
+        <div className="rounded-md border ">
           <DataTable columns={columns} data={referrals} />
         </div>
 
         {referrals.length > 0 && (
           <div className="pt-4 border-t border-border">
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => navigate("/dashboard/referrals")}>
               View All Referrals
             </Button>
           </div>

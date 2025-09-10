@@ -110,18 +110,18 @@ export function ReferralRequests({ className }: ReferralRequestsProps) {
           Your sent referral requests and their status
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="md:py-6 md:px-6 px-2 py-2">
         <div className="rounded-md border">
           <DataTable columns={columns} data={referrals} />
         </div>
 
-        {referrals.length > 0 && (
+        {/* {referrals.length > 0 && (
           <div className="pt-4 border-t border-border">
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => navigate("/dashboard/referral-request")}>
               View All Referral Requests
             </Button>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

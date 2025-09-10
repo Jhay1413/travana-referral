@@ -5,7 +5,7 @@ import QRCodeModal from "@/components/qr-code-modal";
 import { QrCode } from "lucide-react";
 import type { User } from "@/types/schema";
 import DashboardStats from "@/components/dashboard-stats";
-import HolidayDeals from "@/components/holiday-deals";
+// import HolidayDeals from "@/components/holiday-deals";
 import ReferralLink from "@/components/referral-link";
 import { ReferralRequests } from "@/components/referral-requests";
 import { ReferralTable } from "@/components/referral-table";
@@ -17,11 +17,10 @@ export default function Home() {
   const { userId } = useUser();
   const [showQRModal, setShowQRModal] = useState(false);
 
-  const referralUrl = `${window.location.origin}/ref/123456`;
-
   const getWhatsAppQRUrl = () => {
-    const message = `Hi! 👋\n\nI wanted to share Travana with you - they provide amazing travel services and I think you'd love what they offer!\n\nUse my referral link to get started: ${referralUrl}\n\nLet me know if you have any questions! ✈️`;
-    return `https://wa.me/?text=${encodeURIComponent(message)}`;
+    return `${
+      import.meta.env.VITE_BETTER_AUTH_URL
+    }/public-client-request?ref=${userId}`;
   };
 
   return (
@@ -46,7 +45,7 @@ export default function Home() {
           <div className="lg:col-span-2 order-2 lg:order-1 space-y-6 sm:space-y-8">
             <ReferralTable />
             <ReferralRequests />
-            <HolidayDeals />
+            {/* <HolidayDeals /> */}
           </div>
 
           <div className="space-y-6 order-1 lg:order-2">

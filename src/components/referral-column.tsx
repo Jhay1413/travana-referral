@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, Eye, Edit } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import type { Referral } from "@/types/schema";
 
 export const referralTableColumns = (): ColumnDef<Referral>[] => [
@@ -62,6 +61,9 @@ export const referralTableColumns = (): ColumnDef<Referral>[] => [
       const dateB = new Date(rowB.original.createdAt);
       return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
     },
+    meta: {
+      className: "hidden sm:table-cell"
+    }
   },
   {
     header: () => <div className="font-bold text-black">Status</div>,
@@ -98,40 +100,6 @@ export const referralTableColumns = (): ColumnDef<Referral>[] => [
         <span className="font-bold text-green-600 dark:text-green-400">
           &pound;{row.getValue("commission")}
         </span>
-      );
-    },
-  },
-  {
-    header: () => (
-      <div className="font-bold text-black text-right">Actions</div>
-    ),
-    id: "actions",
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center justify-end gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("View referral:", row.original);
-            }}
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("Edit referral:", row.original);
-            }}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-        </div>
       );
     },
   },

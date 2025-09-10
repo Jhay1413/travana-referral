@@ -61,7 +61,6 @@ export const Header = () => {
                 variant="ghost"
                 className="text-muted-foreground hover:text-foreground font-medium"
                 data-testid="button-nav-profile"
-               
               >
                 Profile
               </Button>
@@ -124,7 +123,10 @@ export const Header = () => {
                   <Button
                     variant="ghost"
                     className="justify-start text-foreground hover:text-primary font-medium h-12"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate("/dashboard");
+                    }}
                   >
                     📊 Dashboard
                   </Button>
@@ -132,7 +134,10 @@ export const Header = () => {
                   <Button
                     variant="ghost"
                     className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate("/dashboard/referrals");
+                    }}
                   >
                     👥 Referrals
                   </Button>
@@ -140,7 +145,10 @@ export const Header = () => {
                   <Button
                     variant="ghost"
                     className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate("/dashboard/commissions");
+                    }}
                   >
                     💰 Commissions
                   </Button>
@@ -148,7 +156,10 @@ export const Header = () => {
                   <Button
                     variant="ghost"
                     className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate("/dashboard/profile");
+                    }}
                   >
                     👤 Profile
                   </Button>

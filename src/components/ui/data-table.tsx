@@ -5,6 +5,14 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+// Extend the ColumnMeta type to include className
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData, TValue> {
+    className?: string;
+  }
+}
+
 import {
   Table,
   TableBody,
@@ -36,8 +44,9 @@ export function DataTable<TData, TValue>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const columnClass = header.column.columnDef.meta?.className || "";
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className={columnClass}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -57,11 +66,14 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const columnClass = cell.column.columnDef.meta?.className || "";
+                  return (
+                    <TableCell key={cell.id} className={columnClass}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))
           ) : (
