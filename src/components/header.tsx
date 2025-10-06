@@ -30,6 +30,17 @@ export const Header = () => {
     },
   });
 
+  if (organizationIdLoading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <nav className="bg-card border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
@@ -76,16 +87,18 @@ export const Header = () => {
               >
                 Profile
               </Button>
-              {!organizationIdLoading && organizationId && organizationId.length > 0 && (
-                <Button
-                  variant="ghost"
-                  className="text-muted-foreground hover:text-foreground font-medium"
-                  data-testid="button-nav-members"
-                  onClick={() => navigate("/dashboard/members")}
-                >
-                  Members
-                </Button>
-              )}
+              {!organizationIdLoading &&
+                organizationId &&
+                organizationId.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    className="text-muted-foreground hover:text-foreground font-medium"
+                    data-testid="button-nav-members"
+                    onClick={() => navigate("/dashboard/members")}
+                  >
+                    Members
+                  </Button>
+                )}
               {/* {user?.isAdmin && (
               <Button 
                 variant="ghost" 
@@ -185,19 +198,21 @@ export const Header = () => {
                   >
                     👤 Profile
                   </Button>
-                  {!organizationIdLoading && organizationId && organizationId.length > 0 && (
-                    <Button
-                      variant="ghost"
-                      className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        navigate("/dashboard/members");
-                      }}
-                      data-testid="button-mobile-members"
-                    >
-                      👥 Members
-                    </Button>
-                  )}
+                  {!organizationIdLoading &&
+                    organizationId &&
+                    organizationId.length > 0 && (
+                      <Button
+                        variant="ghost"
+                        className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          navigate("/dashboard/members");
+                        }}
+                        data-testid="button-mobile-members"
+                      >
+                        👥 Members
+                      </Button>
+                    )}
                   {/* {user?.isAdmin && (
                   <Button 
                     variant="ghost" 
