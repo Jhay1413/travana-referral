@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { LoginForm } from "@/components/login-form"
 import { SignupForm } from "@/components/signup-form"
 import { authClient } from "@/lib/auth-client"
-import type { RegistrationMutationSchema } from "@/lib/schemas"
 
 export function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)

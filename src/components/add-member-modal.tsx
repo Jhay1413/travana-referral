@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,7 +36,7 @@ interface AddMemberModalProps {
   isLoading: boolean;
 }
 
-export function AddMemberModal({ onClose, onSuccess, addMember, isLoading }: AddMemberModalProps) {
+export function AddMemberModal({ onClose, addMember, isLoading }: AddMemberModalProps) {
 
 
   const form = useForm<AddMemberForm>({
