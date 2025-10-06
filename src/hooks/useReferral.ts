@@ -12,7 +12,7 @@ import { useUser } from "./useUser";
 export const useFetchReferralRequests = (id: string) => {
   const { data, isLoading, error } = useQuery<RefferalRequest[], Error>({
     queryKey: ["requests", id],
-    queryFn: () => http.get(`/api/referral/${id}`),
+    queryFn: () => http.get(`/api/referrals/${id}`),
     enabled: !!id,
   });
   return { data, isLoading, error };
@@ -20,7 +20,7 @@ export const useFetchReferralRequests = (id: string) => {
 export const useFetchReferrals = (id: string) => {
   const { data, isLoading, error } = useQuery<Referral[], Error>({
     queryKey: ["referrals", id],
-    queryFn: () => http.get(`/api/referral/${id}/referrals`),
+    queryFn: () => http.get(`/api/referrals/user/${id}`),
     enabled: !!id,
   });
   return { data, isLoading, error };
@@ -29,7 +29,7 @@ export const useFetchReferrals = (id: string) => {
 export const useFetchCommissions = (id: string) => {
   const { data, isLoading, error } = useQuery<Referral[], Error>({
     queryKey: ["commissions", id],
-    queryFn: () => http.get(`/api/referral/${id}/commission`),
+    queryFn: () => http.get(`/api/referrals/user/${id}/commission`),
     enabled: !!id,
   });
   return { data, isLoading, error };
@@ -37,7 +37,7 @@ export const useFetchCommissions = (id: string) => {
 export const useFetchReferrerStats = (id: string) => {
   const { data, isLoading, error } = useQuery<FetchReferrerStats, Error>({
     queryKey: ["referrerStats", id],
-    queryFn: () => http.get(`/api/referral/${id}/stats`),
+    queryFn: () => http.get(`/api/referrals/user/${id}/stats`),
     enabled: !!id,
   });
   return { data, isLoading, error };
@@ -55,7 +55,7 @@ export function useReferral(
   } = useMutation({
     mutationFn: async (data: ReferralRequestMutate) => {
       console.log(data);
-      return await http.post("/api/referral/", data);
+      return await http.post("/api/referrals/", data);
     },
     onSuccess: (response) => {
       toast.success("Referral created successfully");

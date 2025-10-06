@@ -61,8 +61,17 @@ export const Header = () => {
                 variant="ghost"
                 className="text-muted-foreground hover:text-foreground font-medium"
                 data-testid="button-nav-profile"
+                onClick={() => navigate("/dashboard/profile")}
               >
                 Profile
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-muted-foreground hover:text-foreground font-medium"
+                data-testid="button-nav-members"
+                onClick={() => navigate("/dashboard/members")}
+              >
+                Members
               </Button>
               {/* {user?.isAdmin && (
               <Button 
@@ -162,6 +171,18 @@ export const Header = () => {
                     }}
                   >
                     👤 Profile
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate("/dashboard/members");
+                    }}
+                    data-testid="button-mobile-members"
+                  >
+                    👥 Members
                   </Button>
 
                   {/* {user?.isAdmin && (

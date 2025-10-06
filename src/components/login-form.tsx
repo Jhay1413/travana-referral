@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { authClient } from "@/lib/auth-client";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import http from "@/lib/http-client";
 
@@ -35,7 +34,6 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
 
   console.log(data);
 
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -51,11 +49,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
       password: formData.password,
     });
   };
-  useEffect(() => {
-    if (session) {
-      navigate("/dashboard");   
-    }
-  }, [session]);
+  // Remove the automatic navigation - let AuthPage handle it
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };

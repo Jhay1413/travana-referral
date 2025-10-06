@@ -1,29 +1,31 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useNavigate, useLocation } from "react-router-dom"
 import { LoginForm } from "@/components/login-form"
 import { SignupForm } from "@/components/signup-form"
+import { authClient } from "@/lib/auth-client"
 import type { RegistrationMutationSchema } from "@/lib/schemas"
 
 export function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const navigate = useNavigate()
+  const location = useLocation()
+  const { data: session } = authClient.useSession()
 
-  const handleLogin = (email: string, password: string) => {
-    console.log("Login attempt:", { email, password })
-    // Redirect to dashboard after successful login
-    navigate("/dashboard")
-  }
+  // Get the intended destination from location state, fallback to dashboard
+  const from = location.state?.from?.pathname || "/dashboard"
 
-  const handleSignup = (data: RegistrationMutationSchema) => {
-    console.log("Signup attempt:", data)
-    // Redirect to dashboard after successful signup
-    navigate("/dashboard")
-  }
+  // Handle redirect after successful authentication
+  useEffect(() => {
+    if (session) {
+      navigate(from, { replace: true })
+    }
+  }, [session, navigate, from])
 
+ 
   if (isLogin) {
     return (
       <LoginForm 
-        onLogin={handleLogin}
+      
         onSwitchToSignup={() => setIsLogin(false)}
       />
     )
@@ -31,7 +33,7 @@ export function AuthPage() {
 
   return (
     <SignupForm 
-      onSignup={handleSignup}
+    
       onSwitchToLogin={() => setIsLogin(true)}
     />
   )

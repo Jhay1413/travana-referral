@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -9,46 +7,85 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useAuth } from "@/hooks/useAuth";
-import type { RegistrationMutationSchema } from "@/lib/schemas";
+import type { AccountRequestSchema } from "@/lib/schemas";
+
+const signupSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  role: z.enum(["member", "owner", "admin"]),
+  orgName: z.string().optional(),
+}).refine((data) => {
+  if (data.role === "owner" && !data.orgName) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Organization name is required for owners",
+  path: ["orgName"],
+});
+
+type SignupForm = z.infer<typeof signupSchema>;
+
 
 interface SignupFormProps {
-  onSignup?: (data: RegistrationMutationSchema) => void;
+  onSignup?: (data: AccountRequestSchema) => void;
   onSwitchToLogin?: () => void;
 }
 
 export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    phoneNumber: "",
-  });
-
   const { signup } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<SignupForm>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      role: "member",
+      orgName: "",
+    },
+  });
 
+  const watchedRole = form.watch("role");
+
+  const onSubmit = async (data: SignupForm) => {
     signup.mutate(
       {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-        phoneNumber: formData.phoneNumber,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        role: data.role,
+        phoneNumber: data.phoneNumber,
+        orgName: data.orgName,
       },
       {
         onSuccess: () => {
-          onSignup?.(formData);
+          onSignup?.(data);
         },
       }
     );
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -59,82 +96,112 @@ export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
           <CardDescription>Enter your details to get started</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="Enter your first name"
-                  value={formData.firstName}
-                  onChange={(e) =>
-                    handleInputChange("firstName", e.target.value)
-                  }
-                  required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your first name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your last name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Enter your last name"
-                  value={formData.lastName}
-                  onChange={(e) =>
-                    handleInputChange("lastName", e.target.value)
-                  }
-                  required
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input type="tel" placeholder="Enter your phone number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="member">Member</SelectItem>
+                        <SelectItem value="owner">Owner</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {watchedRole === "owner" && (
+                <FormField
+                  control={form.control}
+                  name="orgName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Organization Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your organization name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-            </div>
+              )}
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input
-                id="phoneNumber"
-                type="tel"
-                placeholder="Enter your phone number"
-                value={formData.phoneNumber}
-                onChange={(e) =>
-                  handleInputChange("phoneNumber", e.target.value)
-                }
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                required
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={signup.isPending}
-            >
-              {signup.isPending ? "Creating account..." : "Create account"}
-            </Button>
-          </form>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={signup.isPending}
+              >
+                {signup.isPending ? "Creating account..." : "Create account"}
+              </Button>
+            </form>
+          </Form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">

@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import type { RegistrationMutationSchema } from "@/lib/schemas";
+import type {
+  UpdateUserProfile,
+  AccountRequestSchema,
+} from "@/lib/schemas";
 import http from "@/lib/http-client";
-import { useNavigate } from "react-router-dom";
 
-type SignupData = RegistrationMutationSchema;
 
 interface SigninData {
   email: string;
@@ -13,10 +14,9 @@ interface SigninData {
 }
 
 export function useAuth() {
-  const navigate = useNavigate();
   const signupMutation = useMutation({
-    mutationFn: async (data: SignupData) => {
-      return await http.post("/api/signin/signup", data);
+    mutationFn: async (data: AccountRequestSchema) => {
+      return await http.post("/api/users/account-request", data);
     },
     onSuccess: () => {
       toast.success("Account created successfully");
@@ -45,7 +45,7 @@ export function useAuth() {
               toast.dismiss(loadingToastId);
             }
             toast.success("Signed in successfully");
-            navigate("/dashboard");
+            // Don't navigate here - let the AuthPage handle the redirect
           },
           onError: (ctx) => {
             if (loadingToastId) {
@@ -81,13 +81,52 @@ export function useAuth() {
     },
   });
 
+  const updatePasswordMutation = useMutation({
+    mutationFn: async (data: { oldPassword: string; newPassword: string }) => {
+      return await authClient.changePassword({
+        newPassword: data.newPassword,
+        currentPassword: data.oldPassword,
+        revokeOtherSessions: true,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Password updated successfully");
+    },
+    onError: (error) => {
+      console.error("Update password error:", error);
+      toast.error("Failed to update password");
+    },
+  });
+  const updateUserMutation = useMutation({
+    mutationFn: async (data: UpdateUserProfile) => {
+      return await authClient.updateUser({
+        name: data.firstName + " " + data.lastName,
+        phoneNumber: data.phoneNumber,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+    },
+    onSuccess: () => {
+      toast.success("User updated successfully");
+    },
+    
+    onError: (error) => {
+      console.error("Update user error:", error);
+      toast.error("Failed to update user");
+    },
+  });
+
   return {
     signup: signupMutation,
     signin: signinMutation,
     signout: signoutMutation,
+    updatePassword: updatePasswordMutation,
     isLoading:
       signupMutation.isPending ||
       signinMutation.isPending ||
-      signoutMutation.isPending,
+      signoutMutation.isPending ||
+      updatePasswordMutation.isPending ||
+      updateUserMutation.isPending,
+    updateUser: updateUserMutation,
   };
 }

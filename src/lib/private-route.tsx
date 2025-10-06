@@ -1,8 +1,10 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { authClient } from "./auth-client";
 
 export const PrivateRouteWrapper = () => {
   const { data: session, isPending } = authClient.useSession();
+  const location = useLocation();
+  
   console.log(isPending);
   // Show loading while session is being fetched (isPending handles the initial null state)
   if (isPending) {
@@ -18,7 +20,7 @@ export const PrivateRouteWrapper = () => {
 
   // Redirect to auth if no session (session is undefined means not authenticated)
   if (!session) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return <Outlet />;

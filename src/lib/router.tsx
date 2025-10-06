@@ -5,6 +5,9 @@ import { PrivateRouteWrapper } from "./private-route";
 import { PublicClientRequest } from "@/pages/public-client-request";
 import { ReferralsListPage } from "@/pages/referrals-list";
 import { CommissionsListPage } from "@/pages/commissions-list";
+import { UserProfile } from "@/pages/user-profile";
+import MembersPage from "@/pages/members";
+import InvitationPage from "@/pages/invitation";
 import { DashboardLayout } from "@/components/dashboard-layout";
 
 export const router = createBrowserRouter([
@@ -35,6 +38,18 @@ export const router = createBrowserRouter([
           {
             path: "commissions",
             element: <CommissionsListPage />,
+          },
+          {
+            path: "profile",
+            element: <UserProfile />,
+          },
+          {
+            path: "members",
+            element: <MembersPage />,
+          },
+          {
+            path: "invitation/:token",
+            element: <InvitationPage />,
           },
         ],
       },
