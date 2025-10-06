@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useUser } from "@/hooks/useUser";
 import { authClient } from "@/lib/auth-client";
+import { http } from "@/lib/http-client";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +21,15 @@ export const Header = () => {
       console.error("Sign out failed:", error);
     }
   };
+
+  const { data: organizationId, isLoading: organizationIdLoading } = useQuery({
+    queryKey: ["organizationId"],
+    queryFn: async () => {
+      const response = await http.get("/api/org/list");
+      return response;
+    },
+  });
+
   return (
     <nav className="bg-card border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
@@ -65,14 +76,16 @@ export const Header = () => {
               >
                 Profile
               </Button>
-              <Button
-                variant="ghost"
-                className="text-muted-foreground hover:text-foreground font-medium"
-                data-testid="button-nav-members"
-                onClick={() => navigate("/dashboard/members")}
-              >
-                Members
-              </Button>
+              {!organizationIdLoading && organizationId && organizationId.length > 0 && (
+                <Button
+                  variant="ghost"
+                  className="text-muted-foreground hover:text-foreground font-medium"
+                  data-testid="button-nav-members"
+                  onClick={() => navigate("/dashboard/members")}
+                >
+                  Members
+                </Button>
+              )}
               {/* {user?.isAdmin && (
               <Button 
                 variant="ghost" 
@@ -172,19 +185,19 @@ export const Header = () => {
                   >
                     👤 Profile
                   </Button>
-
-                  <Button
-                    variant="ghost"
-                    className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      navigate("/dashboard/members");
-                    }}
-                    data-testid="button-mobile-members"
-                  >
-                    👥 Members
-                  </Button>
-
+                  {!organizationIdLoading && organizationId && organizationId.length > 0 && (
+                    <Button
+                      variant="ghost"
+                      className="justify-start text-muted-foreground hover:text-foreground font-medium h-12"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        navigate("/dashboard/members");
+                      }}
+                      data-testid="button-mobile-members"
+                    >
+                      👥 Members
+                    </Button>
+                  )}
                   {/* {user?.isAdmin && (
                   <Button 
                     variant="ghost" 

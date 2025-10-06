@@ -23,7 +23,7 @@ export function useMembers() {
 
 
 
-  const { data: organizationId } = useQuery({
+  const { data: organizationId, isLoading: organizationIdLoading } = useQuery({
     queryKey: ["organizationId"],
     queryFn: async () => {
 
@@ -39,7 +39,9 @@ export function useMembers() {
     queryFn: async () => {
       const response = await http.get(`/api/org/list/all/${organizationId[0].id}`);
       return response.members as Member[]
+
     },
+    enabled: !!organizationId,
   });
 
   const addMemberMutation = useMutation({
@@ -59,7 +61,7 @@ export function useMembers() {
 
   return {
     members: members || [],
-    isLoading: membersLoading,
+    isLoading: membersLoading || organizationIdLoading,
     addMember: addMemberMutation,
   };
 }
