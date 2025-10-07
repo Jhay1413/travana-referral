@@ -21,7 +21,8 @@ import { Eye, EyeOff, Lock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuth } from "@/hooks/useAuth";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 // Password change form schema
 const passwordChangeSchema = z
@@ -54,7 +55,6 @@ export const AccountSettings = () => {
     new: false,
     confirm: false,
   });
-  const { updatePassword } = useAuth();
   const passwordForm = useForm<PasswordChangeFormData>({
     resolver: zodResolver(passwordChangeSchema),
     defaultValues: {
@@ -72,10 +72,17 @@ export const AccountSettings = () => {
   };
 
   const handlePasswordChange = async (data: PasswordChangeFormData) => {
-    updatePassword.mutate({
-      oldPassword: data.currentPassword,
+    const {data:response ,error} = await authClient.changePassword({
       newPassword: data.newPassword,
+      currentPassword: data.currentPassword,
+      revokeOtherSessions: true,
     });
+    if (error) {
+      toast.error(error.message);
+    }
+    if (response) {
+      toast.success("Password updated successfully");
+    }
   };
 
   const handlePasswordModalClose = () => {

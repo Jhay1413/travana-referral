@@ -8,6 +8,7 @@ import { CommissionsListPage } from "@/pages/commissions-list";
 import { UserProfile } from "@/pages/user-profile";
 import MembersPage from "@/pages/members";
 import InvitationPage from "@/pages/invitation";
+import VerifyEmailPage from "@/pages/verify-email";
 import { DashboardLayout } from "@/components/dashboard-layout";
 
 export const router = createBrowserRouter([
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
   {
     path: "/public-client-request",
     element: <PublicClientRequest />,
+  },
+  {
+    path: "/verify-email",
+    element: <VerifyEmailPage />,
   },
   {
     path: "/dashboard",

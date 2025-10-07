@@ -6,24 +6,27 @@ import { http } from "@/lib/http-client";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getInitials } = useUser();
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
+      setIsLoading(true);
       await authClient.signOut();
       navigate("/");
     } catch (error) {
       console.error("Sign out failed:", error);
+      setIsLoading(false);
     }
   };
-
+  const session = authClient.useSession();
   const { data: organizationId, isLoading: organizationIdLoading } = useQuery({
-    queryKey: ["organizationId"],
+    queryKey: ["organizationId", session?.data?.user?.id],
     queryFn: async () => {
       const response = await http.get("/api/org/list");
       return response;
@@ -249,8 +252,13 @@ export const Header = () => {
                         setIsMobileMenuOpen(false);
                         handleSignOut();
                       }}
+                      disabled={isLoading}
                     >
-                      🚪 Sign Out
+                      {isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        "🚪 Sign Out"
+                      )}
                     </Button>
                   </div>
                 </div>

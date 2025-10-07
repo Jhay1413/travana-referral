@@ -20,7 +20,9 @@ export const PrivateRouteWrapper = () => {
 
   // Redirect to auth if no session (session is undefined means not authenticated)
   if (!session) {
-    return <Navigate to="/" state={{ from: location }} replace />;
+    // Store the attempted location in URL as redirect parameter
+    const redirectPath = encodeURIComponent(location.pathname + location.search);
+    return <Navigate to={`/?redirect=${redirectPath}`} state={{ from: location }} replace />;
   }
 
   return <Outlet />;

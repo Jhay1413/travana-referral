@@ -23,36 +23,37 @@ const columns = [
       <div>{row.original.user.email || "N/A"}</div>
     ),
   },
-  
- 
-  
 ];
 
 export default function MembersPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const { members, isLoading, addMember } = useMembers();
-
-  const handleAddMember = (data: { firstName: string; lastName: string; email: string; contactNumber: string }) => {
-    addMember.mutate({ 
-      email: data.email, 
-      role: "member", 
-      organizationId: members[0]?.organizationId || "",
-      firstName: data.firstName,
-      lastName: data.lastName,
-      contactNumber: data.contactNumber,
-
-    },{
-      onSuccess: () => {
-        setShowAddModal(false);
-        // Refresh the page to show updated data
-      toast.success("Member added successfully");
+  const handleAddMember = (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    contactNumber: string;
+  }) => {
+    addMember.mutate(
+      {
+        email: data.email,
+        role: "member",
+        organizationId: members[0]?.organizationId || "",
+        firstName: data.firstName,
+        lastName: data.lastName,
+        contactNumber: data.contactNumber,
       },
-      onError: () => {
-        toast.error("Failed to add member");
-      },
-    },
-   
-  );
+      {
+        onSuccess: () => {
+          setShowAddModal(false);
+          // Refresh the page to show updated data
+          toast.success("Member added successfully");
+        },
+        onError: () => {
+          toast.error("Failed to add member");
+        },
+      }
+    );
   };
 
   if (isLoading) {
@@ -67,8 +68,6 @@ export default function MembersPage() {
       </div>
     );
   }
-
-  
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
@@ -116,10 +115,11 @@ export default function MembersPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Complete Profiles</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Complete Profiles
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          
         </Card>
       </div>
 

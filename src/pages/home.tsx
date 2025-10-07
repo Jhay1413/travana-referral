@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CreateReferralModal from "@/components/create-referral-modal";
 import QRCodeModal from "@/components/qr-code-modal";
+import { PendingInvitationModal } from "@/components/pending-invitation-modal";
 import { QrCode } from "lucide-react";
 import type { User } from "@/types/schema";
 import DashboardStats from "@/components/dashboard-stats";
@@ -10,12 +11,39 @@ import ReferralLink from "@/components/referral-link";
 import { ReferralRequests } from "@/components/referral-requests";
 import { ReferralTable } from "@/components/referral-table";
 import { useUser } from "@/hooks/useUser";
+import { authClient } from "@/lib/auth-client";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showInvitationModal, setShowInvitationModal] = useState(false);
+  const session = authClient.useSession();
+  const { data: invitations } = useQuery({
+    queryKey: ["user-invitations", session?.data?.user?.id],
+    queryFn: async () => {
+      const response = await authClient.organization.listUserInvitations();
+      return response;
+    },
+    enabled: !!session?.data?.user?.id,
+  });
 
   const { userId } = useUser();
   const [showQRModal, setShowQRModal] = useState(false);
+
+  // Show invitation modal if there are pending invitations
+  console.log(
+    invitations?.data?.map((invitation) => invitation.status === "pending")
+  );
+  console.log(invitations);
+  useEffect(() => {
+    if (
+      invitations &&
+      invitations.data &&
+      invitations.data.some((invitation) => invitation.status === "pending")
+    ) {
+      setShowInvitationModal(true);
+    }
+  }, [invitations]);
 
   const getWhatsAppQRUrl = () => {
     return `${
@@ -80,6 +108,13 @@ export default function Home() {
         onClose={() => setShowQRModal(false)}
         whatsappUrl={getWhatsAppQRUrl()}
         userName={"Jhon Doe"}
+      />
+
+      {/* Pending Invitation Modal */}
+      <PendingInvitationModal
+        isOpen={showInvitationModal}
+        onClose={() => setShowInvitationModal(false)}
+        invitations={invitations?.data || []}
       />
     </>
   );

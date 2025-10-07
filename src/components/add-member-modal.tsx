@@ -36,9 +36,11 @@ interface AddMemberModalProps {
   isLoading: boolean;
 }
 
-export function AddMemberModal({ onClose, addMember, isLoading }: AddMemberModalProps) {
-
-
+export function AddMemberModal({
+  onClose,
+  addMember,
+  isLoading,
+}: AddMemberModalProps) {
   const form = useForm<AddMemberForm>({
     resolver: zodResolver(addMemberSchema),
     defaultValues: {
@@ -107,7 +109,11 @@ export function AddMemberModal({ onClose, addMember, isLoading }: AddMemberModal
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="member@example.com" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="member@example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

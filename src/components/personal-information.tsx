@@ -15,7 +15,8 @@ import { User, Mail, Phone, Shield, Edit3, Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuth } from "@/hooks/useAuth";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 // Personal information form schema
 const personalInfoSchema = z.object({
@@ -44,7 +45,6 @@ export const PersonalInformation = ({
 }: PersonalInformationProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { updateUser } = useAuth();
   // React Hook Form setup
   const form = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
@@ -56,8 +56,20 @@ export const PersonalInformation = ({
     },
   });
 
-  const handleSave = (data: PersonalInfoFormData) => {
-    updateUser.mutate(data);
+  const handleSave = async (data: PersonalInfoFormData) => {
+
+    const {data:response ,error} = await authClient.updateUser({
+      firstName: data.firstName,
+      lastName: data.lastName,
+     
+      phoneNumber: data.phoneNumber,
+    });
+    if (error) {
+      toast.error(error.message);
+    }
+    if (response) {
+      toast.success("User updated successfully");
+    }
   };
 
   const handleCancel = () => {
@@ -158,7 +170,7 @@ export const PersonalInformation = ({
                     <Input
                       type="email"
                       placeholder="Enter your email"
-                      disabled={!isEditing}
+                      disabled={true}
                       {...field}
                     />
                   </FormControl>

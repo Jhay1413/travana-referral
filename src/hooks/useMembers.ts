@@ -18,13 +18,13 @@ export type Member = {
 }
 
 export function useMembers() {
-
+  const session = authClient.useSession();
   const { data: organizations } = authClient.useListOrganizations();
 
 
 
   const { data: organizationId, isLoading: organizationIdLoading } = useQuery({
-    queryKey: ["organizationId"],
+    queryKey: ["organizationId",session?.data?.user?.id],
     queryFn: async () => {
 
       const response = await http.get("/api/org/list");
@@ -35,7 +35,7 @@ export function useMembers() {
   });
 
   const { data: members, isLoading: membersLoading } = useQuery({
-    queryKey: ["members", organizations],
+    queryKey: ["members", organizations,session?.data?.user?.id],
     queryFn: async () => {
       const response = await http.get(`/api/org/list/all/${organizationId[0].id}`);
       return response.members as Member[]
