@@ -29,7 +29,8 @@ export default function InvitationPage() {
   const session = authClient.useSession();
   const { mutate: acceptInvitation, isPending } = useMutation({
     mutationFn: async () => {
-      await authClient.organization.acceptInvitation({ invitationId: token || "" });
+      await authClient.organization.acceptInvitation({ invitationId: token || "" ,
+      });
     },
   });
 

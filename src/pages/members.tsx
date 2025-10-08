@@ -7,11 +7,15 @@ import { Plus, Users } from "lucide-react";
 import { useMembers, type Member } from "@/hooks/useMembers";
 import { AddMemberModal } from "@/components/add-member-modal";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
+import { useMutation } from "@tanstack/react-query";
+import { PendingInvitations } from "@/components/pending-invitations";
+import { queryClient } from "@/lib/queryClient";
 
 const columns = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "Name",
+    header: "Agent(Owners) / Referrers",
     cell: ({ row }: { row: { original: Member } }) => (
       <div>{row.original.user.name || "N/A"}</div>
     ),
@@ -27,33 +31,59 @@ const columns = [
 
 export default function MembersPage() {
   const [showAddModal, setShowAddModal] = useState(false);
-  const { members, isLoading, addMember } = useMembers();
-  const handleAddMember = (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    contactNumber: string;
-  }) => {
-    addMember.mutate(
-      {
-        email: data.email,
+  const { members, isLoading } = useMembers();
+
+  const { mutate: addMemberMutation, isPending } = useMutation({
+    mutationFn: async (email: string) => {
+      await authClient.organization.inviteMember({
+        email: email,
         role: "member",
         organizationId: members[0]?.organizationId || "",
-        firstName: data.firstName,
-        lastName: data.lastName,
-        contactNumber: data.contactNumber,
-      },
-      {
-        onSuccess: () => {
-          setShowAddModal(false);
-          // Refresh the page to show updated data
-          toast.success("Member added successfully");
-        },
-        onError: () => {
-          toast.error("Failed to add member");
-        },
-      }
-    );
+      });
+    },
+    onSuccess: () => {
+      toast.success("Member added successfully");
+      setShowAddModal(false);
+    },
+    onError: () => {
+      toast.error("Failed to add member");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["pending-invitations", members[0]?.organizationId || ""],
+      });
+    },
+  });
+
+  // const handleAddMember = (data: {
+  //   firstName: string;
+  //   lastName: string;
+  //   email: string;
+  //   contactNumber: string;
+  // }) => {
+  //   addMember.mutate(
+  //     {
+  //       email: data.email,
+  //       role: "member",
+  //       organizationId: members[0]?.organizationId || "",
+  //       firstName: data.firstName,
+  //       lastName: data.lastName,
+  //       contactNumber: data.contactNumber,
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         setShowAddModal(false);
+  //         // Refresh the page to show updated data
+  //         toast.success("Member added successfully");
+  //       },
+  //       onError: () => {
+  //         toast.error("Failed to add member");
+  //       },
+  //     }
+  //   );
+  // };
+  const handleAddMember = (email: string) => {
+    addMemberMutation(email);
   };
 
   if (isLoading) {
@@ -131,16 +161,16 @@ export default function MembersPage() {
           <DataTable columns={columns} data={members || []} />
         </CardContent>
       </Card>
+      <PendingInvitations orgId={members[0]?.organizationId || ""} />
 
       {/* Add Member Modal */}
       {showAddModal && (
         <AddMemberModal
-          isLoading={addMember.isPending}
+          isLoading={isPending}
           onClose={() => setShowAddModal(false)}
           addMember={handleAddMember}
           onSuccess={() => {
             setShowAddModal(false);
-            // Refresh the page to show updated data
             window.location.reload();
           }}
         />

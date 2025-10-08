@@ -9,6 +9,7 @@ import { UserProfile } from "@/pages/user-profile";
 import MembersPage from "@/pages/members";
 import InvitationPage from "@/pages/invitation";
 import VerifyEmailPage from "@/pages/verify-email";
+import SignupPage from "@/pages/signup";
 import { DashboardLayout } from "@/components/dashboard-layout";
 
 export const router = createBrowserRouter([
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
   {
     path: "/verify-email",
     element: <VerifyEmailPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
   },
   {
     path: "/dashboard",

@@ -21,10 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const addMemberSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Please enter a valid email address"),
-  contactNumber: z.string().min(1, "Contact number is required"),
 });
 
 type AddMemberForm = z.infer<typeof addMemberSchema>;
@@ -32,7 +29,7 @@ type AddMemberForm = z.infer<typeof addMemberSchema>;
 interface AddMemberModalProps {
   onClose: () => void;
   onSuccess: () => void;
-  addMember: (data: AddMemberForm) => void;
+  addMember: (email: string) => void;
   isLoading: boolean;
 }
 
@@ -44,15 +41,12 @@ export function AddMemberModal({
   const form = useForm<AddMemberForm>({
     resolver: zodResolver(addMemberSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
       email: "",
-      contactNumber: "",
     },
   });
 
   const onSubmit = async (data: AddMemberForm) => {
-    addMember(data);
+    addMember(data.email);
   };
 
   const handleClose = () => {
@@ -73,35 +67,6 @@ export function AddMemberModal({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
             <FormField
               control={form.control}
               name="email"
@@ -114,20 +79,6 @@ export function AddMemberModal({
                       placeholder="member@example.com"
                       {...field}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contactNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Number</FormLabel>
-                  <FormControl>
-                    <Input type="tel" placeholder="+1234567890" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

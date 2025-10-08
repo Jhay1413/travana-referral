@@ -51,31 +51,15 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
     }
   };
 
-  const shareEmail = () => {
-    const customMessage = getShareMessage("email");
-    const subject = customMessage?.subject
-      ? processMessage(customMessage.subject)
-      : "Join Travana - Premium Travel Services";
-    const body = customMessage
-      ? processMessage(customMessage.message)
-      : `Hi there!\n\nI wanted to share Travana with you - they provide amazing travel services and I think you'd love what they offer.\n\nUse my referral link to get started: ${referralUrl}\n\nBest regards!`;
-    window.location.href = `mailto:?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+  const facebookLink = () => {
+    window.open(`https://www.facebook.com/TinasTravelDeals1`, "_blank");
   };
 
-  const shareLinkedIn = () => {
-    const customMessage = getShareMessage("linkedin");
-    const text = customMessage
-      ? processMessage(customMessage.message)
-      : `Check out Travana's premium travel services! ${referralUrl}`;
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-        referralUrl
-      )}&summary=${encodeURIComponent(text)}`,
-      "_blank"
-    );
+  const instagramLink = () => {
+    window.open(`https://www.instagram.com/tinas_travel_deals`, "_blank");
   };
+
+ 
 
   const shareWhatsApp = () => {
     const customMessage = getShareMessage("whatsapp");
@@ -144,16 +128,6 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
             <Button
               variant="secondary"
               className="h-12 touch-manipulation text-sm"
-              onClick={shareEmail}
-              data-testid="button-share-email"
-            >
-              <span className="mr-1 sm:mr-2">✉️</span>
-              <span className="hidden sm:inline">Email</span>
-              <span className="sm:hidden">Mail</span>
-            </Button>
-            <Button
-              variant="secondary"
-              className="h-12 touch-manipulation text-sm"
               onClick={shareWhatsApp}
               data-testid="button-share-whatsapp"
             >
@@ -163,11 +137,22 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
             <Button
               variant="secondary"
               className="h-12 touch-manipulation text-sm"
-              onClick={shareLinkedIn}
+              onClick={facebookLink}
+              data-testid="button-share-email"
+            >
+              <span className="mr-1 sm:mr-2">✉️</span>
+              <span className="hidden sm:inline">Facebook</span>
+              <span className="sm:hidden">Facebook</span>
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="h-12 touch-manipulation text-sm"
+              onClick={instagramLink}
               data-testid="button-share-linkedin"
             >
               <span className="mr-1 sm:mr-2">🔗</span>
-              LinkedIn
+              Instagram
             </Button>
           </div>
         </div>
