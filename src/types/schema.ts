@@ -223,6 +223,7 @@ export const referralSchema = z.object({
   id: z.string(),
   transactionId: z.string(),
   status: z.string(),
+  referredBy: z.string(),
   clientName: z.string(),
   potentialCommission: z.number(),
   commission: z.number(),

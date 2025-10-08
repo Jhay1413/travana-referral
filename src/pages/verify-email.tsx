@@ -19,12 +19,16 @@ export default function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
+  const isFirstLogin = searchParams.get("isFirstLogin");
 
   const [verificationStatus, setVerificationStatus] = useState<
     "loading" | "success" | "error" | "expired"
   >("loading");
   const [showResendModal, setShowResendModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [countdown, setCountdown] = useState(5);
+
+
 
   // Verify email mutation
   const verifyEmailMutation = useMutation({
@@ -34,6 +38,18 @@ export default function VerifyEmailPage() {
     onSuccess: () => {
       setVerificationStatus("success");
       toast.success("Email verified successfully!");
+      
+      // Start countdown
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            navigate("/dashboard", { state: { isFirstLogin } });
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     },
     onError: (error: Error) => {
       toast.error(error?.message || "Failed to verify email");
@@ -74,7 +90,7 @@ export default function VerifyEmailPage() {
   };
 
   const handleGoToDashboard = () => {
-    navigate("/dashboard");
+    navigate("/dashboard", { state: { isFirstLogin } });
   };
 
   if (verificationStatus === "loading") {
@@ -111,6 +127,11 @@ export default function VerifyEmailPage() {
                 Your email has been successfully verified. You can now access
                 your account.
               </p>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <p className="text-green-800 text-sm">
+                  Redirecting to dashboard in <span className="font-bold text-lg">{countdown}</span> seconds...
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   onClick={handleGoToLogin}
@@ -123,7 +144,7 @@ export default function VerifyEmailPage() {
                   onClick={handleGoToDashboard}
                   className="w-full sm:w-auto"
                 >
-                  Go to Dashboard
+                  Go to Dashboard Now
                 </Button>
               </div>
             </div>

@@ -6,6 +6,7 @@ import type {
   FetchReferrerStats,
 } from "@/types/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUser } from "./useUser";
 
@@ -16,15 +17,14 @@ export const useFetchReferralRequests = (id: string) => {
     enabled: !!id,
   });
   return { data, isLoading, error };
-};  
-export const useFetchReferrals = (id: string) => {
-  const { data, isLoading, error } = useQuery<Referral[], Error>({
-    queryKey: ["referrals", id],
-    queryFn: () => http.get(`/api/referrals/user/${id}`),
-    enabled: !!id,
-  });
-  return { data, isLoading, error };
 };
+export const useFetchReferrals = ({ id, options }: { id: string, options: UseQueryOptions<Referral[], Error> }) => {
+
+  return useQuery<Referral[], Error>({
+    ...options,
+    queryFn: () => http.get(`/api/referrals/user/${id}`),
+  });
+}
 
 export const useFetchCommissions = (id: string) => {
   const { data, isLoading, error } = useQuery<Referral[], Error>({
@@ -43,7 +43,7 @@ export const useFetchReferrerStats = (id: string) => {
   return { data, isLoading, error };
 };
 export function useReferral(
- 
+
 ) {
   const queryClient = useQueryClient();
   const { userId } = useUser();
@@ -67,6 +67,9 @@ export function useReferral(
       toast.error("Failed to create referral");
     },
   });
+
+
+
 
   return {
     createReferral,

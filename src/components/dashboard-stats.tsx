@@ -49,31 +49,6 @@ export default function DashboardStats({ userId }: { userId: string }) {
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
-              <p className="text-sm text-muted-foreground">Total Earnings</p>
-              <p
-                className="text-2xl sm:text-3xl font-bold text-accent truncate"
-                data-testid="text-total-earnings"
-              >
-                £{stats?.totalEarnings.toFixed(2)}
-              </p>
-            </div>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-accent text-lg sm:text-xl">💰</span>
-            </div>
-          </div>
-          <div className="flex items-center mt-3 sm:mt-4">
-            <span className="text-sm text-accent font-medium">+12.5%</span>
-            <span className="text-sm text-muted-foreground ml-1">
-              this month
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border border-border">
-        <CardContent className="p-4 sm:p-6">
-          <div className="flex items-center justify-between">
-            <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Active Referrals</p>
               <p
                 className="text-2xl sm:text-3xl font-bold text-foreground"
@@ -94,7 +69,6 @@ export default function DashboardStats({ userId }: { userId: string }) {
           </div>
         </CardContent>
       </Card>
-
       <Card className="border border-border">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between">
@@ -121,7 +95,7 @@ export default function DashboardStats({ userId }: { userId: string }) {
           </div>
         </CardContent>
       </Card>
-
+      
       <Card className="border border-border">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between">
@@ -143,6 +117,30 @@ export default function DashboardStats({ userId }: { userId: string }) {
           <div className="flex items-center mt-3 sm:mt-4">
             <span className="text-sm text-muted-foreground">
               0 referrals pending
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="border border-border">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex items-center justify-between">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-muted-foreground">Available spend</p>
+              <p
+                className="text-2xl sm:text-3xl font-bold text-accent truncate"
+                data-testid="text-total-earnings"
+              >
+                £{stats?.totalEarnings.toFixed(2)}
+              </p>
+            </div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span className="text-accent text-lg sm:text-xl">💰</span>
+            </div>
+          </div>
+          <div className="flex items-center mt-3 sm:mt-4">
+            <span className="text-sm text-accent font-medium">+12.5%</span>
+            <span className="text-sm text-muted-foreground ml-1">
+              this month
             </span>
           </div>
         </CardContent>

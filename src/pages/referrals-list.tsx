@@ -27,16 +27,22 @@ export const ReferralsListPage = () => {
   const { userId } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [timeFilter, setTimeFilter] = useState<string>("all");
 
   const {
     data: referrals = [],
     isLoading,
     error,
-  } = useFetchReferrals(userId || "");
+  } = useFetchReferrals({
+    id: userId || "",
+    options: {
+      queryKey: ["referrals", userId],
+      enabled: !!userId,
+    },
+  });
 
   const columns = useMemo(() => referralTableColumns(), []);
 
-  // Filter referrals based on search and status
   const filteredReferrals = useMemo(() => {
     let filtered = referrals;
 
@@ -53,7 +59,6 @@ export const ReferralsListPage = () => {
       );
     }
 
-    // Filter by status
     if (statusFilter !== "all") {
       filtered = filtered.filter(
         (referral) =>
@@ -61,8 +66,31 @@ export const ReferralsListPage = () => {
       );
     }
 
+    if (timeFilter !== "all") {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      filtered = filtered.filter((referral) => {
+        const referralDate = new Date(referral.createdAt);
+        
+        switch (timeFilter) {
+          case "today":
+            return referralDate >= today;
+          case "thisWeek":
+            return referralDate >= startOfWeek;
+          case "thisMonth":
+            return referralDate >= startOfMonth;
+          default:
+            return true;
+        }
+      });
+    }
+
     return filtered;
-  }, [referrals, searchTerm, statusFilter]);
+  }, [referrals, searchTerm, statusFilter, timeFilter]);
 
   const getStatusCounts = () => {
     const counts = referrals.reduce((acc, referral) => {
@@ -234,6 +262,17 @@ export const ReferralsListPage = () => {
                   <SelectItem value="in booking">In Booking</SelectItem>
                 </SelectContent>
               </Select>
+              <Select value={timeFilter} onValueChange={setTimeFilter}>
+                <SelectTrigger className="w-full sm:w-[200px]">
+                  <SelectValue placeholder="Filter by time" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Time</SelectItem>
+                  <SelectItem value="today">Today</SelectItem>
+                  <SelectItem value="thisWeek">This Week</SelectItem>
+                  <SelectItem value="thisMonth">This Month</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Data Table */}
@@ -251,6 +290,7 @@ export const ReferralsListPage = () => {
                   onClick={() => {
                     setSearchTerm("");
                     setStatusFilter("all");
+                    setTimeFilter("all");
                   }}
                 >
                   Clear Filters

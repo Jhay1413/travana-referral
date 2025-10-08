@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import CreateReferralModal from "@/components/create-referral-modal";
 import QRCodeModal from "@/components/qr-code-modal";
 import { PendingInvitationModal } from "@/components/pending-invitation-modal";
+import { ChangePasswordModal } from "@/components/change-password-modal";
 import { QrCode } from "lucide-react";
 import type { User } from "@/types/schema";
 import DashboardStats from "@/components/dashboard-stats";
@@ -15,8 +17,12 @@ import { authClient } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isFirstLogin = location.state?.isFirstLogin;
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInvitationModal, setShowInvitationModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const session = authClient.useSession();
   const { data: invitations } = useQuery({
     queryKey: ["user-invitations", session?.data?.user?.id],
@@ -27,8 +33,21 @@ export default function Home() {
     enabled: !!session?.data?.user?.id,
   });
 
+
+
+
   const { userId } = useUser();
   const [showQRModal, setShowQRModal] = useState(false);
+
+  // Extract isFirstLogin from location state
+  console.log("isFirstLogin:", isFirstLogin);
+
+  // Show password modal if it's first login and password hasn't been set
+  useEffect(() => {
+    if (isFirstLogin) {
+      setShowPasswordModal(true);
+    }
+  }, [isFirstLogin]);
 
   // Show invitation modal if there are pending invitations
   console.log(
@@ -115,6 +134,15 @@ export default function Home() {
         isOpen={showInvitationModal}
         onClose={() => setShowInvitationModal(false)}
         invitations={invitations?.data || []}
+      />
+
+      {/* Change Password Modal for First Login */}
+      <ChangePasswordModal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        onSuccess={() => {
+            navigate("/dashboard");
+        }}
       />
     </>
   );

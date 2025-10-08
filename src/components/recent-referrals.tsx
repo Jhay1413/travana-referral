@@ -25,7 +25,13 @@ export default function RecentReferrals() {
     data: referrals = [],
     isLoading,
     error,
-  } = useFetchReferrals(userId || "");
+  } = useFetchReferrals({
+    id: userId || "",
+    options: {
+      queryKey: ["referrals", userId],
+      enabled: !!userId,
+    },
+  });
 
   const getInitials = (name: string) => {
     return name

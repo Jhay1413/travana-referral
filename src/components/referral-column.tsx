@@ -66,6 +66,13 @@ export const referralTableColumns = (): ColumnDef<Referral>[] => [
     }
   },
   {
+    header: () => <div className="font-bold text-black">Referred by:</div>,
+    accessorKey: "referredBy",
+    cell: ({ row }) => {
+      return <span className="text-xs">{row.getValue("referredBy")}</span>;
+    },
+  },
+  {
     header: () => <div className="font-bold text-black">Status</div>,
     accessorKey: "status",
     cell: ({ row }) => {

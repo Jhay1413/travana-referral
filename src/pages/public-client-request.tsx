@@ -146,26 +146,7 @@ export const PublicClientRequest = () => {
               </div>
 
               {/* Email */}
-              <div>
-                <Label
-                  htmlFor="referredEmail"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Email Address *
-                </Label>
-                <Input
-                  id="referredEmail"
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="mt-2 h-12 text-base"
-                  {...register("referredEmail")}
-                />
-                {errors.referredEmail && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {errors.referredEmail.message}
-                  </p>
-                )}
-              </div>
+              
 
               {/* Phone Number */}
               <div>
@@ -195,7 +176,7 @@ export const PublicClientRequest = () => {
                   htmlFor="notes"
                   className="text-sm font-medium text-foreground"
                 >
-                  Additional Details
+                  Additional Details (Optional)
                 </Label>
                 <Textarea
                   id="notes"
