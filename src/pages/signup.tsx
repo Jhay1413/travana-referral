@@ -73,6 +73,7 @@ export default function SignupPage() {
         phoneNumber: data.contactNumber,
         role: "member",
         name: `${data.firstName} ${data.lastName}`,
+        percentageCommission: 25,
       });
       return {
         verifyToken: response.data?.token,

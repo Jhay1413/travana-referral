@@ -56,7 +56,11 @@ export const authClient = createAuthClient({
         orgName:{
           type:"string",
           required:false,
-        }
+        },
+        percentageCommission: {
+          type: "number",
+          required: false,
+        },
       },
     }),
   ],
