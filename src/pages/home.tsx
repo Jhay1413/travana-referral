@@ -12,13 +12,11 @@ import { ReferralTable } from "@/components/referral-table";
 import { useUser } from "@/hooks/useUser";
 import { ChangePasswordModal } from "@/components/change-password-modal";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { is } from "zod/v4/locales";
 
 export default function Home() {
 
   const location = useLocation();
   const { isNewUser } = location.state || {};
-  const [searchParams] = useSearchParams();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(isNewUser || false);
   const { userId } = useUser();
