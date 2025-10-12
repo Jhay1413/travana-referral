@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CreateReferralModal from "@/components/create-referral-modal";
 import QRCodeModal from "@/components/qr-code-modal";
@@ -10,29 +10,34 @@ import ReferralLink from "@/components/referral-link";
 import { ReferralRequests } from "@/components/referral-requests";
 import { ReferralTable } from "@/components/referral-table";
 import { useUser } from "@/hooks/useUser";
+import { ChangePasswordModal } from "@/components/change-password-modal";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export default function Home() {
 
+
+  const [searchParams] = useSearchParams();
+  const isFirstLogin = searchParams.get("firstLogin") === "true" ? true : false;
   const [showCreateModal, setShowCreateModal] = useState(false);
-
-
-
-
-
+  const [showPasswordModal, setShowPasswordModal] = useState(isFirstLogin);
   const { userId } = useUser();
   const [showQRModal, setShowQRModal] = useState(false);
-
+  const navigate = useNavigate();
   // Extract isFirstLogin from location state
 
 
   // Show invitation modal if there are pending invitations
 
- 
+
+  useEffect(() => {
+    if (isFirstLogin) {
+      setShowPasswordModal(true);
+    }
+  }, [isFirstLogin]);
 
   const getWhatsAppQRUrl = () => {
-    return `${
-      import.meta.env.VITE_BETTER_AUTH_URL
-    }/public-client-request?ref=${userId}`;
+    return `${import.meta.env.VITE_BETTER_AUTH_URL
+      }/public-client-request?ref=${userId}`;
   };
 
   return (
@@ -99,14 +104,14 @@ export default function Home() {
         onClose={() => setShowInvitationModal(false)}
         invitations={invitations?.data || []}
       />
-
+*/}
       <ChangePasswordModal
         isOpen={showPasswordModal}
         onClose={() => setShowPasswordModal(false)}
         onSuccess={() => {
-            navigate("/dashboard");
+          navigate("/dashboard");
         }}
-      /> */}
+      />
     </>
   );
 }

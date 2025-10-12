@@ -62,7 +62,6 @@ export default function SignupPage() {
   const token = searchParams.get("token");
   const email = searchParams.get("email");
 
-  console.log(token);
   const { mutate: signUp } = useMutation({
     mutationFn: async (data: SignupForm) => {
       const response = await authClient.signUp.email({

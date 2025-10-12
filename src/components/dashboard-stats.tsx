@@ -18,7 +18,6 @@ type DashboardStats = {
 export default function DashboardStats({ userId }: { userId: string }) {
   const { data: stats } = useFetchReferrerStats(userId);
 
-  console.log(stats);
 
   // const { data: stats, isLoading } = useQuery<DashboardStats>({
   //   queryKey: ["/api/dashboard/stats"],

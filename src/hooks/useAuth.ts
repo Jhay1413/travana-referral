@@ -48,7 +48,6 @@ export function useAuth() {
             // Don't navigate here - let the AuthPage handle the redirect
           },
           onError: (ctx) => {
-            console.log(ctx);
             if (loadingToastId) {
               toast.dismiss(loadingToastId);
             }

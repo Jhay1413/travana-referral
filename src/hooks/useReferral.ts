@@ -54,7 +54,6 @@ export function useReferral(
     error,
   } = useMutation({
     mutationFn: async (data: ReferralRequestMutate) => {
-      console.log(data);
       return await http.post("/api/referrals/", data);
     },
     onSuccess: (response) => {

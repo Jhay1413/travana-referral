@@ -88,7 +88,6 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
             }
           },
           onError: (ctx) => {
-            console.log(ctx);
             if (loadingToastId) {
               toast.dismiss(loadingToastId);
             }

@@ -5,7 +5,6 @@ export const PrivateRouteWrapper = () => {
   const { data: session, isPending } = authClient.useSession();
   const location = useLocation();
   
-  console.log(isPending);
   // Show loading while session is being fetched (isPending handles the initial null state)
   if (isPending) {
     return (

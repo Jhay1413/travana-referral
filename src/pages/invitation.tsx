@@ -64,10 +64,8 @@ export default function InvitationPage() {
       });
     }, 5000);
   }, [navigate]);
-console.log(email,session?.data?.user?.email)
   useEffect(() => {
     if (email === session?.data?.user?.email && token) {
-      console.log("accepting invitation")
       acceptInvitation();
     } else if (
       session?.data?.user?.email &&
