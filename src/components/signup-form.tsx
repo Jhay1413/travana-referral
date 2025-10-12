@@ -22,10 +22,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/hooks/useAuth";
+import { CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 import type { AccountRequestSchema } from "@/lib/schemas";
 
 const signupSchema = z.object({
@@ -55,6 +64,8 @@ interface SignupFormProps {
 
 export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
   const { signup } = useAuth();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedData, setSubmittedData] = useState<SignupForm | null>(null);
 
   const form = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
@@ -82,10 +93,17 @@ export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
       },
       {
         onSuccess: () => {
+          setSubmittedData(data);
+          setShowSuccessModal(true);
           onSignup?.(data);
         },
       }
     );
+  };
+
+  const handleModalClose = () => {
+    setShowSuccessModal(false);
+    form.reset();
   };
 
   return (
@@ -217,6 +235,39 @@ export function SignupForm({ onSignup, onSwitchToLogin }: SignupFormProps) {
           </div>
         </CardContent>
       </Card>
+
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogTitle className="text-xl font-semibold text-center">
+              Thank You for Your Registration!
+            </DialogTitle>
+            <DialogDescription className="text-center mt-4 space-y-3">
+              <p>
+                Hi {submittedData?.firstName}, we've received your registration request.
+              </p>
+              <p>
+                Our team will carefully review your application and get back to you within 24-48 hours with the next steps.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                We'll send you an email at <strong>{submittedData?.email}</strong> once your account has been approved.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 mt-6">
+            <Button onClick={handleModalClose} className="w-full">
+              Got it, thanks!
+            </Button>
+            <Button variant="outline" onClick={onSwitchToLogin} className="w-full">
+              Back to Sign In
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

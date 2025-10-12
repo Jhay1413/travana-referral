@@ -20,7 +20,7 @@ export const referralTableColumns = (): ColumnDef<Referral>[] => [
 
       return (
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+          <div className="hidden lg:flex w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center flex-shrink-0">
             <span className="text-white font-bold text-sm">
               {getInitials(referral.clientName)}
             </span>
@@ -100,7 +100,9 @@ export const referralTableColumns = (): ColumnDef<Referral>[] => [
     },
   },
   {
-    header: () => <div className="font-bold text-black">Commission</div>,
+    header: () => <div className="font-bold text-black w-16 lg:w-full">
+      <p className="truncate">Commission</p>
+    </div>,
     accessorKey: "commission",
     cell: ({ row }) => {
       return (

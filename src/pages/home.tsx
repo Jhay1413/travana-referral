@@ -11,18 +11,22 @@ import { ReferralRequests } from "@/components/referral-requests";
 import { ReferralTable } from "@/components/referral-table";
 import { useUser } from "@/hooks/useUser";
 import { ChangePasswordModal } from "@/components/change-password-modal";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { is } from "zod/v4/locales";
 
 export default function Home() {
 
-
+  const location = useLocation();
+  const { isNewUser } = location.state || {};
   const [searchParams] = useSearchParams();
-  const isFirstLogin = searchParams.get("firstLogin") === "true" ? true : false;
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(isFirstLogin);
+  const [showPasswordModal, setShowPasswordModal] = useState(isNewUser || false);
   const { userId } = useUser();
   const [showQRModal, setShowQRModal] = useState(false);
   const navigate = useNavigate();
+
+
+
   // Extract isFirstLogin from location state
 
 
@@ -30,10 +34,10 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (isFirstLogin) {
+    if (isNewUser) {
       setShowPasswordModal(true);
     }
-  }, [isFirstLogin]);
+  }, [isNewUser]);
 
   const getWhatsAppQRUrl = () => {
     return `${import.meta.env.VITE_BETTER_AUTH_URL

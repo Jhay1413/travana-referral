@@ -19,7 +19,7 @@ export default function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
-  const isFirstLogin = searchParams.get("isFirstLogin");
+  const isNewUser = searchParams.get("isNewUser") === "true" ? true : false;
 
   const [verificationStatus, setVerificationStatus] = useState<
     "loading" | "success" | "error" | "expired"
@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
-            navigate("/dashboard", { state: { isFirstLogin } });
+            navigate("/dashboard", { state: { isNewUser } });
             return 0;
           }
           return prev - 1;
@@ -90,7 +90,7 @@ export default function VerifyEmailPage() {
   };
 
   const handleGoToDashboard = () => {
-    navigate("/dashboard", { state: { isFirstLogin } });
+    navigate("/dashboard", { state: { isNewUser } });
   };
 
   if (verificationStatus === "loading") {

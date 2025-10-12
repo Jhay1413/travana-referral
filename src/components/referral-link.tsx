@@ -17,9 +17,8 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
   const [copied, setCopied] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
   const { userId } = useUser();
-  const referralUrl = `${
-    import.meta.env.VITE_BETTER_AUTH_URL
-  }/public-client-request?ref=${userId}`;
+  const referralUrl = `${import.meta.env.VITE_BETTER_AUTH_URL
+    }/public-client-request?ref=${userId}`;
 
   // Fetch custom share messages
   const { data: shareMessages } = useQuery<ShareMessage[]>({
@@ -59,7 +58,7 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
     window.open(`https://www.instagram.com/tinas_travel_deals`, "_blank");
   };
 
- 
+
 
   const shareWhatsApp = () => {
     const customMessage = getShareMessage("whatsapp");
@@ -74,9 +73,8 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
   };
 
   const getWhatsAppQRUrl = () => {
-    return `${
-      import.meta.env.VITE_BETTER_AUTH_URL
-    }/public-client-request?ref=${userId}`;
+    return `${import.meta.env.VITE_BETTER_AUTH_URL
+      }/public-client-request?ref=${userId}`;
   };
 
   return (
@@ -131,7 +129,7 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
               onClick={shareWhatsApp}
               data-testid="button-share-whatsapp"
             >
-              <span className="mr-1 sm:mr-2">💬</span>
+              <img src="/whatsApp.jpeg" alt="WhatsApp" className="w-4 h-4 inline-block" />
               WhatsApp
             </Button>
             <Button
@@ -140,7 +138,7 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
               onClick={facebookLink}
               data-testid="button-share-email"
             >
-              <span className="mr-1 sm:mr-2">✉️</span>
+              <img src="/facebook.jpeg" alt="Facebook" className="w-4 h-4 inline-block" />
               <span className="hidden sm:inline">Facebook</span>
               <span className="sm:hidden">Facebook</span>
             </Button>
@@ -151,7 +149,7 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
               onClick={instagramLink}
               data-testid="button-share-linkedin"
             >
-              <span className="mr-1 sm:mr-2">🔗</span>
+              <img src="/ig.jpeg" alt="Instagram" className="w-4 h-4 inline-block" />
               Instagram
             </Button>
           </div>
