@@ -11,7 +11,7 @@ import { ReferralRequests } from "@/components/referral-requests";
 import { ReferralTable } from "@/components/referral-table";
 import { useUser } from "@/hooks/useUser";
 import { ChangePasswordModal } from "@/components/change-password-modal";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Home() {
 
