@@ -83,18 +83,16 @@ export const PublicClientRequest = () => {
     <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-foreground">
-              Travel Request Form
+          <CardHeader className="text-center ">
+            <CardTitle className="text-2xl flex  items-center justify-center font-bold text-foreground">
+              <img
+                src="/logo.jpeg"
+                alt="Logo"
+                className="h-18 w-auto object-contain bg-black"
+              />
             </CardTitle>
-            <CardDescription>
-              {ref ? (
-                <span className="text-primary font-medium">
-                  Referred by: {ref}
-                </span>
-              ) : (
-                "Tell us about your dream trip and we'll help make it happen!"
-              )}
+            <CardDescription className="text-lg font-bold  mt-6">
+              Tell us about your dream trip and we'll help make it happen!
             </CardDescription>
           </CardHeader>
 
@@ -146,7 +144,7 @@ export const PublicClientRequest = () => {
               </div>
 
               {/* Email */}
-              
+
 
               {/* Phone Number */}
               <div>
@@ -197,7 +195,7 @@ export const PublicClientRequest = () => {
                   type="submit"
                   className="w-full h-12 text-base font-semibold"
                   disabled={isPending}
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
                   {isPending ? "Submitting..." : "Submit Travel Request"}
                 </Button>

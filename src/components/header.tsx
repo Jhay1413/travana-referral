@@ -49,12 +49,11 @@ export const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h1
-              className="text-xl sm:text-2xl font-bold text-primary"
-              data-testid="text-brand-nav"
-            >
-              Travana
-            </h1>
+            <img
+              src="/logo.jpeg"
+              alt="Logo"
+              className="h-10 w-auto object-contain max-w-[200px]"
+            />
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-6 ml-8">

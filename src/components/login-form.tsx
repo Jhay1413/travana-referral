@@ -78,7 +78,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
               toast.dismiss(loadingToastId);
             }
             toast.success("Signed in successfully");
-            
+
             // Check for redirect parameter in URL and navigate to it
             const redirectPath = searchParams.get('redirect');
             if (redirectPath) {
@@ -125,7 +125,9 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
       <div className="min-h-screen flex items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              <img src="/logo.jpeg" alt="Logo" className="w-auto h-16 mx-auto" />
+            </CardTitle>
             <CardDescription>
               Sign in to your account to continue
             </CardDescription>

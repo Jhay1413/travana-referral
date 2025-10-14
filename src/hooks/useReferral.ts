@@ -58,7 +58,11 @@ export function useReferral(
     },
     onSuccess: (response) => {
       toast.success("Referral created successfully");
+
       queryClient.invalidateQueries({ queryKey: ["requests", userId] });
+
+      window.open("https://wa.me/447541063492?text=Hey+%F0%9F%91%8B+I%E2%80%99ve+been+recommended%21+%F0%9F%8E%89+Can+you+add+me+to+your+%F0%9F%8C%B4+VIP+WhatsApp++Group%C2%A0%F0%9F%8C%B4%C2%A0please", "_blank");
+
       return response;
     },
     onError: (error) => {
