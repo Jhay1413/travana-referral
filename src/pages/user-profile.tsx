@@ -7,25 +7,25 @@ import { useUser } from "@/hooks/useUser";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { 
-  Calendar, 
+import {
+  Calendar,
   Camera,
   LogOut,
-  Users,
-  DollarSign,
-  Clock
+  Clock,
 } from "lucide-react";
 
 export const UserProfile = () => {
-  const { 
-    firstName, 
-    lastName, 
-    email, 
-    role, 
-    phoneNumber, 
+  const {
+    firstName,
+    lastName,
+    email,
+    role,
+    phoneNumber,
     image
   } = useUser();
-  
+
+  const session = authClient.useSession();
+
   // Placeholder data for demonstration
   const placeholderData = {
     firstName: firstName || "John",
@@ -38,7 +38,7 @@ export const UserProfile = () => {
     totalCommissions: 1250.50,
     lastLogin: "2 hours ago"
   };
-  
+
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -102,9 +102,9 @@ export const UserProfile = () => {
                   <div className="relative">
                     <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                       {image ? (
-                        <img 
-                          src={image} 
-                          alt="Profile" 
+                        <img
+                          src={image}
+                          alt="Profile"
                           className="w-24 h-24 rounded-full object-cover"
                         />
                       ) : (
@@ -137,31 +137,18 @@ export const UserProfile = () => {
                   {/* Member Since */}
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Calendar className="w-4 h-4" />
-                    <span>Member since {placeholderData.memberSince}</span>
+                    <span>Member since {session.data?.user?.createdAt ? new Date(session.data.user.createdAt).getFullYear() : placeholderData.memberSince}</span>
                   </div>
 
                   {/* Statistics */}
                   <div className="w-full space-y-3 mt-6">
-                    <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
-                      <div className="flex items-center space-x-2">
-                        <Users className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">Total Referrals</span>
-                      </div>
-                      <span className="font-semibold text-foreground">{placeholderData.totalReferrals}</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
-                      <div className="flex items-center space-x-2">
-                        <DollarSign className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">Total Commissions</span>
-                      </div>
-                      <span className="font-semibold text-foreground">${placeholderData.totalCommissions.toLocaleString()}</span>
-                    </div>
+
                     <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <Clock className="w-4 h-4 text-muted-foreground" />
                         <span className="text-sm text-muted-foreground">Last Login</span>
                       </div>
-                      <span className="font-semibold text-foreground">{placeholderData.lastLogin}</span>
+                      <span className="font-semibold text-foreground">{new Date().toDateString()}</span>
                     </div>
                   </div>
 
@@ -181,7 +168,7 @@ export const UserProfile = () => {
 
           {/* Profile Details */}
           <div className="lg:col-span-2 space-y-6">
-            <PersonalInformation 
+            <PersonalInformation
               placeholderData={placeholderData}
               getRoleColor={getRoleColor}
             />

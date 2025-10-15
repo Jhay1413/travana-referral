@@ -4,17 +4,14 @@ import http from "@/lib/http-client";
 
 
 export type Member = {
-  createdAt: string;
-  id: string;
-  organizationId: string;
-  role: string;
-  user: {
-    email: string;
-    id: string;
-    image: string;
-    name: string;
-  };
-  userId: string;
+  id: string,
+  role: string,
+  totalReferred: number,
+  lastReferred: string | null,
+  organizationId: string,
+  name: string | null,
+  email: string | null,
+
 }
 
 export function useMembers() {
@@ -24,7 +21,7 @@ export function useMembers() {
 
 
   const { data: organizationId, isLoading: organizationIdLoading } = useQuery({
-    queryKey: ["organizationId",session?.data?.user?.id],
+    queryKey: ["organizationId", session?.data?.user?.id],
     queryFn: async () => {
 
       const response = await http.get("/api/org/list");
@@ -35,21 +32,21 @@ export function useMembers() {
   });
 
   const { data: members, isLoading: membersLoading } = useQuery({
-    queryKey: ["members", organizations,session?.data?.user?.id],
+    queryKey: ["members", organizations, session?.data?.user?.id],
     queryFn: async () => {
       const response = await http.get(`/api/org/list/all/${organizationId[0].id}`);
-      return response.members as Member[]
+      return response as Member[]
 
     },
     enabled: !!organizationId,
   });
 
   const addMemberMutation = useMutation({
-    mutationFn: async (data: { email: string, role: string, organizationId: string ,firstName: string,lastName: string,contactNumber: string }) => {
+    mutationFn: async (data: { email: string, role: string, organizationId: string, firstName: string, lastName: string, contactNumber: string }) => {
       const response = await http.post(`/api/auth-options/invitation`, {
         email: data.email,
         role: data.role,
-        organizationId:organizationId[0].id,
+        organizationId: organizationId[0].id,
         firstName: data.firstName,
         lastName: data.lastName,
         contactNumber: data.contactNumber,

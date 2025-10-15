@@ -12,7 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, DollarSign } from "lucide-react";
+import { Search, Filter, DollarSign, PoundSterling } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -108,7 +108,7 @@ export const CommissionsListPage = () => {
                     £{totalCommission.toFixed(2)}
                   </p>
                 </div>
-                <DollarSign className="h-8 w-8 text-green-600" />
+                <PoundSterling className="h-8 w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>

@@ -25,7 +25,18 @@ export const useFetchReferrals = ({ id, options }: { id: string, options: UseQue
     queryFn: () => http.get(`/api/referrals/user/${id}`),
   });
 }
-
+export const useAgentStats = (id: string) => {
+  return useQuery<{
+    successRate: number,
+    conversionRate: number,
+  }, Error>({
+    queryKey: ["agentStats", id],
+    queryFn: () => http.get(`/api/referrals/user/${id}/monthly-stats`) as Promise<{
+      successRate: number,
+      conversionRate: number,
+    }>,
+  });
+}
 export const useFetchCommissions = (id: string) => {
   const { data, isLoading, error } = useQuery<Referral[], Error>({
     queryKey: ["commissions", id],

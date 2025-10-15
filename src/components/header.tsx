@@ -73,14 +73,14 @@ export const Header = () => {
               >
                 Referrals
               </Button>
-              <Button
+              {/* <Button
                 variant="ghost"
                 className="text-muted-foreground hover:text-foreground font-medium"
                 data-testid="button-nav-commissions"
                 onClick={() => navigate("/dashboard/commissions")}
               >
                 Commissions
-              </Button>
+              </Button> */}
               <Button
                 variant="ghost"
                 className="text-muted-foreground hover:text-foreground font-medium"

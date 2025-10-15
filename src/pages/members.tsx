@@ -17,14 +17,35 @@ const columns = [
     accessorKey: "Name",
     header: "Agent(Owners) / Referrers",
     cell: ({ row }: { row: { original: Member } }) => (
-      <div>{row.original.user.name || "N/A"}</div>
+      <div>{row.original.name || "N/A"}</div>
     ),
   },
   {
     accessorKey: "email",
     header: "Email",
     cell: ({ row }: { row: { original: Member } }) => (
-      <div>{row.original.user.email || "N/A"}</div>
+      <div>{row.original.email || "N/A"}</div>
+    ),
+  },
+  {
+    accessorKey: "role",
+    header: "Role",
+    cell: ({ row }: { row: { original: Member } }) => (
+      <div>{row.original.role || "N/A"}</div>
+    ),
+  },
+  {
+    accessorKey: "totalReferred",
+    header: "Total Referral",
+    cell: ({ row }: { row: { original: Member } }) => (
+      <div>{row.original.totalReferred}</div>
+    ),
+  },
+  {
+    accessorKey: "lastReferred",
+    header: "Last Referred",
+    cell: ({ row }: { row: { original: Member } }) => (
+      <div>{row.original.lastReferred || "N/A"}</div>
     ),
   },
 ];

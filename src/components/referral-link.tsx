@@ -8,6 +8,7 @@ import QRCodeModal from "./qr-code-modal";
 import type { User, ShareMessage } from "@/types/schema";
 import { toast } from "sonner";
 import { useUser } from "@/hooks/useUser";
+import { useAgentStats } from "@/hooks/useReferral";
 
 interface ReferralLinkProps {
   user: User;
@@ -17,6 +18,8 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
   const [copied, setCopied] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
   const { userId } = useUser();
+
+  const { data } = useAgentStats(userId || "");
   const referralUrl = `${import.meta.env.VITE_BETTER_AUTH_URL
     }/public-client-request?ref=${userId}`;
 
@@ -167,7 +170,7 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
                 className="font-semibold text-foreground"
                 data-testid="text-link-clicks"
               >
-                23
+                0
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -176,20 +179,10 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
                 className="font-semibold text-accent"
                 data-testid="text-conversions"
               >
-                7
+                {data?.conversionRate || 0}%
               </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                Commission Earned
-              </span>
-              <span
-                className="font-semibold text-accent"
-                data-testid="text-commission-earned"
-              >
-                £840
-              </span>
-            </div>
+
             <div className="pt-2 border-t border-border">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground">
@@ -199,7 +192,7 @@ export default function ReferralLink({ user }: ReferralLinkProps) {
                   className="font-bold text-primary"
                   data-testid="text-success-rate"
                 >
-                  30.4%
+                  {data?.successRate || 0}%
                 </span>
               </div>
             </div>
