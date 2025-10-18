@@ -86,7 +86,7 @@ export const PublicClientRequest = () => {
           <CardHeader className="text-center ">
             <CardTitle className="text-2xl flex  items-center justify-center font-bold text-foreground">
               <img
-                src="/logo.jpeg"
+              src="/logo2.png"
                 alt="Logo"
                 className="h-18 w-auto object-contain bg-black"
               />

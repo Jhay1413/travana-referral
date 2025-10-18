@@ -50,9 +50,9 @@ export const Header = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <img
-              src="/logo.jpeg"
+              src="/logo2.png"
               alt="Logo"
-              className="h-10 w-auto object-contain max-w-[200px]"
+              className="w-auto object-contain "
             />
 
             {/* Desktop Navigation */}

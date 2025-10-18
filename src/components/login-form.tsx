@@ -126,7 +126,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
-              <img src="/logo.jpeg" alt="Logo" className="w-auto h-16 mx-auto" />
+              <img src="/logo2.png" alt="Logo" className="object-contain mx-auto" />
             </CardTitle>
             <CardDescription>
               Sign in to your account to continue
